@@ -867,6 +867,281 @@ footer { background: #050d1a; border-top: 3px solid var(--gold); padding: 40px 3
 .footer-links a:hover { color: var(--gold); }
 .footer-bottom { border-top: 1px solid rgba(255,255,255,.06); padding-top: 18px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,.25); font-family: var(--ff-m); }
 
+/* ══════════════════════════════════════════════
+   PANEL JEU — PHASES SÉQUENTIELLES
+══════════════════════════════════════════════ */
+
+/* Phase stepper */
+.phase-stepper {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; margin-bottom: 18px; padding: 14px 0 4px;
+}
+.phase-step {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  min-width: 70px;
+}
+.ps-ico {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--off); border: 2px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: all .3s;
+}
+.phase-step.active .ps-ico { background: var(--navy); border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,168,0,.2); }
+.phase-step.done .ps-ico { background: var(--green); border-color: var(--green); }
+.ps-lbl { font-family: var(--ff-m); font-size: 8px; font-weight: 700; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.phase-step.active .ps-lbl { color: var(--navy); }
+.phase-step.done .ps-lbl { color: var(--green); }
+.ps-line { flex: 1; height: 2px; background: var(--line); margin-bottom: 22px; min-width: 20px; transition: background .3s; }
+.ps-line.done { background: var(--green); }
+
+/* ── Rubrique active card ── */
+.rub-active-card {
+  background: var(--white); border: 1px solid var(--line);
+  border-top: 3px solid var(--gold);
+  border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow);
+  padding: 0;
+}
+
+/* Nom de la rubrique — en gros titre */
+.rac-rub-name {
+  font-family: var(--ff-h); font-size: clamp(22px, 3.5vw, 36px); font-weight: 900;
+  color: var(--navy); text-transform: uppercase; letter-spacing: .04em;
+  text-align: center; padding: 20px 24px 8px;
+  line-height: 1.1;
+}
+.rac-rub-meta {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 0 24px 14px;
+}
+
+/* Équipe à répondre */
+.rac-team-turn {
+  background: linear-gradient(90deg, var(--navy) 0%, var(--navy-l) 100%);
+  padding: 14px 24px; display: flex; align-items: center; gap: 14px;
+  flex-wrap: wrap;
+}
+.rtt-label {
+  font-family: var(--ff-m); font-size: 9px; font-weight: 700;
+  color: rgba(255,255,255,.45); letter-spacing: .18em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.rtt-team-name {
+  font-family: var(--ff-h); font-size: clamp(18px, 2.5vw, 26px); font-weight: 900;
+  color: var(--gold); text-transform: uppercase; letter-spacing: .04em; flex: 1;
+}
+.rtt-team-badge {
+  font-family: var(--ff-m); font-size: 9px; font-weight: 700;
+  padding: 3px 12px; border-radius: 14px;
+}
+.badge-a-pill { background: rgba(30,111,217,.2); color: #6BA3E8; border: 1px solid rgba(30,111,217,.3); }
+.badge-b-pill { background: rgba(232,168,0,.15); color: var(--gold); border: 1px solid rgba(232,168,0,.3); }
+
+/* Question slot */
+.rac-question-slot {
+  background: var(--off); border-bottom: 1px solid var(--line);
+  padding: 14px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.rqs-label { font-family: var(--ff-m); font-size: 8px; color: var(--muted); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+.rqs-q { font-family: var(--ff-h); font-size: 17px; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: .04em; flex: 1; }
+.rqs-pts { display: flex; gap: 6px; flex-wrap: wrap; }
+.rqs-pt { font-family: var(--ff-m); font-size: 9px; font-weight: 700; padding: 3px 9px; border-radius: 10px; }
+.rqs-pt.ok  { background: rgba(0,184,148,.1); color: var(--green); border: 1px solid rgba(0,184,148,.2); }
+.rqs-pt.bad { background: rgba(214,48,49,.08); color: var(--red); border: 1px solid rgba(214,48,49,.2); }
+.rqs-pt.try { background: rgba(225,112,85,.08); color: var(--orange); border: 1px solid rgba(225,112,85,.2); }
+
+/* Scores collectifs intégrés */
+.rac-scores {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px;
+  padding: 20px 24px;
+}
+.rac-score-side { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.rac-score-side.r { align-items: center; }
+.rac-team-nm { font-family: var(--ff-h); font-size: 13px; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: .04em; text-align: center; }
+.rac-score-val { font-family: var(--ff-h); font-size: clamp(48px, 7vw, 72px); font-weight: 900; line-height: 1; }
+.rac-score-val.a { color: var(--blue); }
+.rac-score-val.b { color: var(--navy); }
+.rac-team-sub { font-family: var(--ff-m); font-size: 8px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.rac-score-mid { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.rac-score-sep { font-family: var(--ff-h); font-size: 32px; font-weight: 300; color: var(--muted); }
+.rac-timer-box { text-align: center; }
+.rac-timer { font-family: var(--ff-m); font-size: 20px; font-weight: 700; color: var(--gold); }
+.rac-timer-lbl { font-family: var(--ff-m); font-size: 8px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+
+/* Rubrique progression bar */
+.rub-prog-bar-wrap { height: 6px; background: var(--off); border-radius: 3px; overflow: hidden; margin-bottom: 14px; }
+.rub-prog-bar { height: 100%; background: linear-gradient(90deg, var(--blue), var(--gold)); border-radius: 3px; transition: width .8s ease; }
+.rub-prog-list { display: flex; flex-direction: column; gap: 5px; }
+.rpl-row {
+  display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+  background: var(--off); border: 1.5px solid var(--line); border-radius: 7px; transition: all .2s;
+}
+.rpl-row.active { border-color: var(--gold); background: rgba(232,168,0,.05); }
+.rpl-row.done { border-color: rgba(0,184,148,.25); background: rgba(0,184,148,.03); }
+.rpl-row.reserve { opacity: .6; }
+.rpl-idx { width: 22px; height: 22px; border-radius: 50%; background: var(--navy); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--ff-m); font-size: 9px; font-weight: 700; color: var(--gold); }
+.rpl-row.done .rpl-idx { background: var(--green); color: #fff; }
+.rpl-nm { font-family: var(--ff-h); font-size: 13px; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: .04em; flex: 1; }
+.rpl-scores { font-family: var(--ff-m); font-size: 11px; color: var(--muted); }
+.rpl-scores b.a { color: var(--blue); }
+.rpl-scores b.b { color: var(--navy); }
+.rpl-tag { font-family: var(--ff-m); font-size: 8px; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+.rpl-tag.active { background: rgba(232,168,0,.1); color: var(--navy); border: 1px solid rgba(232,168,0,.25); }
+.rpl-tag.done { background: rgba(0,184,148,.1); color: var(--green); border: 1px solid rgba(0,184,148,.22); }
+.rpl-tag.wait { background: var(--off); color: var(--muted); border: 1px solid var(--line); }
+.rpl-tag.reserve { background: var(--off); color: var(--muted); border: 1px solid var(--line); font-size: 7px; }
+
+/* ── Collectif recap ── */
+.collectif-recap {
+  background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--green);
+  border-radius: var(--r); padding: 16px 24px; margin-bottom: 14px; box-shadow: var(--shadow);
+  text-align: center;
+}
+.cr-label { font-family: var(--ff-m); font-size: 9px; font-weight: 700; color: var(--green); letter-spacing: .18em; text-transform: uppercase; margin-bottom: 10px; }
+.cr-scores { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.cr-team { text-align: center; }
+.cr-nm { font-family: var(--ff-h); font-size: 14px; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.cr-pts { font-family: var(--ff-h); font-size: 40px; font-weight: 900; line-height: 1; }
+.cr-pts.a { color: var(--blue); }
+.cr-pts.b { color: var(--navy); }
+.cr-sep { font-family: var(--ff-h); font-size: 22px; font-weight: 300; color: var(--muted); }
+
+/* ── Bombardement card ── */
+.bomb-curr-card {
+  background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--gold);
+  border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow); padding: 0;
+}
+.bcc-header {
+  background: var(--navy); padding: 10px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.bcc-phase-label { font-family: var(--ff-h); font-size: 13px; font-weight: 800; color: var(--gold); letter-spacing: .06em; text-transform: uppercase; }
+.bcc-order { font-family: var(--ff-m); font-size: 10px; color: rgba(255,255,255,.5); }
+.bcc-player-name {
+  font-family: var(--ff-h); font-size: clamp(24px, 3.5vw, 40px); font-weight: 900;
+  color: var(--navy); text-transform: uppercase; letter-spacing: .04em;
+  text-align: center; padding: 18px 24px 6px;
+}
+.bcc-player-meta { text-align: center; padding: 0 24px 12px; }
+.bcc-team-pill {
+  display: inline-block; font-family: var(--ff-m); font-size: 10px; font-weight: 700;
+  padding: 4px 14px; border-radius: 14px; letter-spacing: .06em;
+}
+.bcc-team-pill.a { background: rgba(30,111,217,.1); color: var(--blue); border: 1px solid rgba(30,111,217,.2); }
+.bcc-team-pill.b { background: rgba(27,42,107,.08); color: var(--navy); border: 1px solid rgba(27,42,107,.15); }
+.bcc-timer-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 24px; border-top: 1px solid var(--line);
+}
+.bcc-timer { font-family: var(--ff-m); font-size: 36px; font-weight: 700; color: var(--navy); min-width: 72px; }
+.bcc-timer-bar-wrap { flex: 1; height: 6px; background: var(--off); border-radius: 3px; overflow: hidden; }
+.bcc-timer-bar { height: 100%; background: linear-gradient(90deg, var(--blue), var(--gold)); border-radius: 3px; transition: width 1s linear; }
+.bcc-score-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px; background: var(--off); border-top: 1px solid var(--line);
+}
+.bcc-score-lbl { font-family: var(--ff-m); font-size: 9px; color: var(--muted); letter-spacing: .14em; text-transform: uppercase; }
+.bcc-score-val { font-family: var(--ff-m); font-size: 22px; font-weight: 700; color: var(--gold); }
+
+/* Bomb queue list */
+.bomb-queue-list { display: flex; flex-wrap: wrap; gap: 5px; }
+.bql-item {
+  padding: 4px 12px; border-radius: 12px; font-family: var(--ff-m);
+  font-size: 9px; font-weight: 700; letter-spacing: .06em;
+}
+.bql-item.done { background: rgba(0,184,148,.1); color: var(--green); border: 1px solid rgba(0,184,148,.22); }
+.bql-item.curr { background: var(--gold); color: var(--navy); border: 1px solid var(--gold); }
+.bql-item.wait { background: var(--off); color: var(--muted); border: 1px solid var(--line); }
+
+/* ── Attente card ── */
+.attente-card {
+  background: var(--white); border: 1px solid var(--line); border-radius: var(--r);
+  box-shadow: var(--shadow); padding: 48px 32px; text-align: center;
+}
+.att-spinner { position: relative; width: 72px; height: 72px; margin: 0 auto 20px; }
+.att-ring {
+  width: 72px; height: 72px; border-radius: 50%;
+  border: 3px solid var(--off); border-top-color: var(--gold);
+  position: absolute; top: 0; left: 0;
+  animation: spin 1.2s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.att-logo {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  font-family: var(--ff-h); font-size: 14px; font-weight: 900; color: var(--navy);
+}
+.att-title { font-family: var(--ff-h); font-size: 26px; font-weight: 900; color: var(--navy); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+.att-sub { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 20px; }
+.att-pulse-bar { width: 200px; height: 4px; background: var(--off); border-radius: 2px; overflow: hidden; margin: 0 auto 14px; }
+.att-pulse-fill { height: 100%; background: linear-gradient(90deg, var(--navy), var(--gold)); border-radius: 2px; animation: pulse-fill 2s ease-in-out infinite; }
+@keyframes pulse-fill { 0%{width:0;margin-left:0} 50%{width:100%;margin-left:0} 51%{width:100%;margin-left:0} 100%{width:0;margin-left:100%} }
+.att-meta { font-family: var(--ff-m); font-size: 9px; color: var(--muted); letter-spacing: .14em; text-transform: uppercase; }
+
+/* ── Résultats / Vainqueur ── */
+.winner-card {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-d) 100%);
+  border-radius: var(--r); padding: 32px 24px; text-align: center;
+  position: relative; overflow: hidden; margin-bottom: 14px;
+  box-shadow: var(--shadow-lg);
+}
+.winner-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 60% 40%, rgba(232,168,0,.1), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.012) 0, rgba(255,255,255,.012) 1px, transparent 1px, transparent 32px);
+}
+.wc-confetti { position: absolute; top: 14px; right: 20px; font-size: 28px; animation: wobble 1.5s ease-in-out infinite; }
+@keyframes wobble { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(10deg)} }
+.wc-label { font-family: var(--ff-m); font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: .22em; text-transform: uppercase; margin-bottom: 8px; position: relative; z-index: 1; }
+.wc-team-name { font-family: var(--ff-h); font-size: clamp(28px, 5vw, 52px); font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 12px; position: relative; z-index: 1; }
+.wc-score-final { display: flex; align-items: center; justify-content: center; gap: 16px; position: relative; z-index: 1; margin-bottom: 8px; }
+.wc-sv { font-family: var(--ff-h); font-size: clamp(40px, 7vw, 72px); font-weight: 900; line-height: 1; }
+.wc-sv.a { color: var(--gold); }
+.wc-sv.b { color: rgba(255,255,255,.5); }
+.wc-sep { font-family: var(--ff-h); font-size: 32px; font-weight: 300; color: rgba(255,255,255,.3); }
+.wc-sub { font-family: var(--ff-m); font-size: 9px; color: rgba(255,255,255,.4); letter-spacing: .14em; text-transform: uppercase; position: relative; z-index: 1; }
+
+/* MVP match card */
+.mvp-match-card {
+  background: var(--white); border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 14px;
+}
+.mmc-header {
+  background: var(--off); padding: 12px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 12px;
+}
+.mmc-trophy { font-size: 22px; }
+.mmc-label { font-family: var(--ff-h); font-size: 16px; font-weight: 900; color: var(--navy); text-transform: uppercase; letter-spacing: .06em; }
+.mmc-edition { font-family: var(--ff-m); font-size: 9px; color: var(--muted); margin-top: 2px; }
+.mmc-body { padding: 18px 20px; display: flex; align-items: center; gap: 18px; }
+.mmc-avatar {
+  width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+  background: var(--navy); border: 3px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-h); font-size: 22px; font-weight: 900; color: var(--gold);
+  box-shadow: 0 4px 14px rgba(27,42,107,.2);
+}
+.mmc-name { font-family: var(--ff-h); font-size: 22px; font-weight: 900; color: var(--navy); text-transform: uppercase; letter-spacing: .04em; }
+.mmc-team { font-size: 12px; color: var(--muted); margin-top: 3px; margin-bottom: 12px; }
+.mmc-stats { display: flex; gap: 20px; }
+.mmc-stat { text-align: center; }
+.mmc-sv { font-family: var(--ff-m); font-size: 18px; font-weight: 700; color: var(--gold); }
+.mmc-sl { font-family: var(--ff-m); font-size: 8px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; }
+
+/* Demo phase navigation */
+.demo-phase-nav {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 16px; padding: 10px 14px;
+  background: var(--off); border: 1.5px dashed var(--line); border-radius: var(--r);
+}
+.dpn-btn {
+  padding: 5px 14px; border-radius: 16px; border: 1.5px solid var(--line);
+  background: var(--white); color: var(--gray);
+  font-family: var(--ff-h); font-size: 11px; font-weight: 700; cursor: pointer;
+  letter-spacing: .04em; text-transform: uppercase; transition: all .15s;
+}
+.dpn-btn:hover, .dpn-btn.active { background: var(--navy); color: var(--gold); border-color: var(--navy); }
+
 /* Scrollbars */
 ::-webkit-scrollbar{width:3px;height:3px;}
 ::-webkit-scrollbar-track{background:transparent;}
@@ -1125,49 +1400,311 @@ footer { background: #050d1a; border-top: 3px solid var(--gold); padding: 40px 3
     </div>
   </div>
 
-  <!-- TAB : SCOREBOARD -->
+  <!-- TAB : SCOREBOARD / JEU -->
   <div class="tab-panel active" id="tab-scoreboard">
     <div class="two-col">
+
+      <!-- ══ COLONNE PRINCIPALE — PANEL JEU ══ -->
       <div>
+        <!-- En-tête du match -->
         <div class="sh">
-          <div class="sh-left"><div class="eyebrow"><div class="ldot"></div> En direct</div><div class="sh-title">Match en cours</div></div>
-          <button class="fs-btn" onclick="document.getElementById('fs-overlay').classList.add('active')">⛶ Mode projection</button>
-        </div>
-        <div class="sb-card">
-          <div class="sb-head">
-            <div class="sb-head-title">Demi-Finale — 4ème Édition</div>
-            <div class="badges"><span class="badge badge-live">● EN DIRECT</span><span class="badge badge-phase">Manche 2/3</span></div>
+          <div class="sh-left">
+            <div class="eyebrow"><div class="ldot"></div> En direct</div>
+            <div class="sh-title" id="jeu-sh-title">Match en cours</div>
           </div>
-          <div class="sb-body">
-            <div class="sb-teams">
-              <div><div class="team-nm">Les Éclaireurs</div><div class="team-sub">Groupe A · PAP</div></div>
-              <div class="score-wrap"><span class="sv-l" id="ldg-sa">14</span><span class="ssep">–</span><span class="sv-r" id="ldg-sb">11</span></div>
-              <div style="text-align:right"><div class="team-nm">Alpha Genius</div><div class="team-sub">Groupe B · Cap-Haïtien</div></div>
-            </div>
-          </div>
-          <div class="sb-stats">
-            <div class="sbs"><span class="sbs-v" id="ldg-timer">08:24</span><span class="sbs-l">Temps restant</span></div>
-            <div class="sbs"><span class="sbs-v">Q2</span><span class="sbs-l">Phase</span></div>
-            <div class="sbs"><span class="sbs-v" style="color:var(--green)">+3</span><span class="sbs-l">Avance</span></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="badge badge-live" id="jeu-live-badge">● EN DIRECT</span>
+            <button class="fs-btn" onclick="document.getElementById('fs-overlay').classList.add('active')">⛶ Projection</button>
           </div>
         </div>
-        <!-- Other matches -->
-        <div style="margin-top:24px">
-          <div class="sh"><div class="sh-left"><div class="eyebrow">Autres matchs du jour</div></div></div>
-          <div class="match-list">
-            <div class="match-card" style="border-color:rgba(214,48,49,.3)">
-              <div class="mc-bar" style="background:rgba(214,48,49,.05)"><span class="mc-date">AUJOURD'HUI · 14H00</span><span class="mc-phase" style="color:var(--red)">● LIVE — Manche 1</span></div>
-              <div class="mc-body"><div class="mc-tm">Les Titans</div><div class="mc-sc live-s">7 – 5</div><div class="mc-tm r">Cerveau Royal</div></div>
-              <div class="mc-foot"><span class="mc-venue">📍 Salle B, PAP</span><button class="mc-btn-lnk">Voir →</button></div>
+
+        <!-- ══════════════════════════════════════
+             PHASE 1 — SÉRIE COLLECTIVE (rubriques)
+        ══════════════════════════════════════ -->
+        <div id="phase-collectif" class="jeu-phase">
+
+          <!-- Indicateur de phase en haut -->
+          <div class="phase-stepper">
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Début</span></div>
+            <div class="ps-line done"></div>
+            <div class="phase-step active"><span class="ps-ico">🎯</span><span class="ps-lbl">Collectif</span></div>
+            <div class="ps-line"></div>
+            <div class="phase-step"><span class="ps-ico">💥</span><span class="ps-lbl">Bombardement</span></div>
+            <div class="ps-line"></div>
+            <div class="phase-step"><span class="ps-ico">🏆</span><span class="ps-lbl">Résultats</span></div>
+          </div>
+
+          <!-- Carte rubrique active -->
+          <div class="rub-active-card">
+            <!-- NOM DE LA RUBRIQUE en grand -->
+            <div class="rac-rub-name" id="rac-rub-name">Culture Générale</div>
+            <div class="rac-rub-meta">
+              <span class="badge badge-live" style="font-size:9px">● RUBRIQUE ACTIVE</span>
+              <span style="font-family:var(--ff-m);font-size:10px;color:var(--muted)" id="rac-rub-count">Rubrique 3 / 10</span>
             </div>
-            <div class="match-card">
-              <div class="mc-bar"><span class="mc-date">AUJOURD'HUI · 16H30</span><span class="mc-phase">Quart de finale</span></div>
-              <div class="mc-body"><div class="mc-tm">Les Pionniers</div><div class="mc-sc pend">À venir</div><div class="mc-tm r">Nova Intellect</div></div>
-              <div class="mc-foot"><span class="mc-venue">📍 Salle A, PAP</span><button class="mc-btn-lnk">+ Rappel →</button></div>
+
+            <!-- ÉQUIPE QUI RÉPOND -->
+            <div class="rac-team-turn" id="rac-team-turn">
+              <div class="rtt-label">Équipe à répondre</div>
+              <div class="rtt-team-name" id="rtt-team-name">Les Éclaireurs</div>
+              <div class="rtt-team-badge badge-a-pill">Équipe A</div>
+            </div>
+
+            <!-- QUESTION SLOT -->
+            <div class="rac-question-slot">
+              <div class="rqs-label">Question en cours</div>
+              <div class="rqs-q" id="rqs-q">Question <span id="rqs-qnum">7</span> / <span id="rqs-qtot">12</span></div>
+              <div class="rqs-pts">
+                <span class="rqs-pt ok">✅ +10</span>
+                <span class="rqs-pt bad">❌ −5</span>
+                <span class="rqs-pt try">🔄 +8</span>
+              </div>
+            </div>
+
+            <!-- SCORES COLLECTIFS -->
+            <div class="rac-scores">
+              <div class="rac-score-side">
+                <div class="rac-team-nm" id="rac-na">Les Éclaireurs</div>
+                <div class="rac-score-val a" id="rac-sa">14</div>
+                <div class="rac-team-sub">Équipe A</div>
+              </div>
+              <div class="rac-score-mid">
+                <div class="rac-score-sep">–</div>
+                <div class="rac-timer-box">
+                  <div class="rac-timer" id="rac-timer">08:24</div>
+                  <div class="rac-timer-lbl">Temps restant</div>
+                </div>
+              </div>
+              <div class="rac-score-side r">
+                <div class="rac-team-nm" id="rac-nb">Alpha Genius</div>
+                <div class="rac-score-val b" id="rac-sb">11</div>
+                <div class="rac-team-sub">Équipe B</div>
+              </div>
             </div>
           </div>
+
+          <!-- Progression des rubriques -->
+          <div class="sb-card" style="margin-top:16px">
+            <div class="sb-head">
+              <div class="sb-head-title">Progression — Série Collective</div>
+              <span style="font-family:var(--ff-m);font-size:10px;color:var(--muted)" id="rub-prog-txt">3 / 10 complétées</span>
+            </div>
+            <div style="padding:14px 18px">
+              <div class="rub-prog-bar-wrap">
+                <div class="rub-prog-bar" id="rub-prog-bar" style="width:30%"></div>
+              </div>
+              <div class="rub-prog-list" id="rub-prog-list">
+                <!-- rendered by JS -->
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /phase-collectif -->
+
+        <!-- ══════════════════════════════════════
+             PHASE 2 — BOMBARDEMENT individuel
+        ══════════════════════════════════════ -->
+        <div id="phase-bomb" class="jeu-phase" style="display:none">
+
+          <div class="phase-stepper">
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Début</span></div>
+            <div class="ps-line done"></div>
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Collectif</span></div>
+            <div class="ps-line done"></div>
+            <div class="phase-step active"><span class="ps-ico">💥</span><span class="ps-lbl">Bombardement</span></div>
+            <div class="ps-line"></div>
+            <div class="phase-step"><span class="ps-ico">🏆</span><span class="ps-lbl">Résultats</span></div>
+          </div>
+
+          <!-- Résumé collectif terminé -->
+          <div class="collectif-recap">
+            <div class="cr-label">Série collective — Score final</div>
+            <div class="cr-scores">
+              <div class="cr-team">
+                <div class="cr-nm" id="cr-na">Les Éclaireurs</div>
+                <div class="cr-pts a" id="cr-sa">38</div>
+              </div>
+              <div class="cr-sep">–</div>
+              <div class="cr-team">
+                <div class="cr-nm" id="cr-nb">Alpha Genius</div>
+                <div class="cr-pts b" id="cr-sb">31</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Joueur actuel -->
+          <div class="bomb-curr-card">
+            <div class="bcc-header">
+              <div class="bcc-phase-label">💥 Série individuelle — Bombardement</div>
+              <div class="bcc-order" id="bcc-order">Joueur 3 / 8</div>
+            </div>
+            <!-- Nom du joueur -->
+            <div class="bcc-player-name" id="bcc-name">Jean-David Pierre</div>
+            <div class="bcc-player-meta">
+              <span class="bcc-team-pill a" id="bcc-team">Équipe A · Les Éclaireurs</span>
+            </div>
+            <!-- Timer -->
+            <div class="bcc-timer-row">
+              <div class="bcc-timer" id="bcc-timer">1:00</div>
+              <div class="bcc-timer-bar-wrap">
+                <div class="bcc-timer-bar" id="bcc-timer-bar" style="width:100%"></div>
+              </div>
+            </div>
+            <!-- Score individuel -->
+            <div class="bcc-score-row">
+              <div class="bcc-score-lbl">Score individuel</div>
+              <div class="bcc-score-val" id="bcc-score">+40 pts</div>
+            </div>
+          </div>
+
+          <!-- File d'attente -->
+          <div class="sb-card" style="margin-top:16px">
+            <div class="sb-head">
+              <div class="sb-head-title">Ordre de passage</div>
+              <span style="font-family:var(--ff-m);font-size:10px;color:var(--muted)" id="bomb-q-status">3 restants</span>
+            </div>
+            <div style="padding:12px 16px">
+              <div class="bomb-queue-list" id="bomb-queue-list"><!-- rendered by JS --></div>
+            </div>
+          </div>
+
+          <!-- Classement individuel temps réel -->
+          <div class="sb-card" style="margin-top:16px">
+            <div class="sb-head"><div class="sb-head-title">Classement individuel en cours</div></div>
+            <div style="padding:0">
+              <table style="width:100%;border-collapse:collapse">
+                <thead style="background:var(--off)">
+                  <tr>
+                    <th style="padding:8px 14px;text-align:left;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">#</th>
+                    <th style="padding:8px 14px;text-align:left;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Joueur</th>
+                    <th style="padding:8px 14px;text-align:left;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Équipe</th>
+                    <th style="padding:8px 14px;text-align:right;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Pts</th>
+                  </tr>
+                </thead>
+                <tbody id="bomb-rank-body"><!-- rendered by JS --></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div><!-- /phase-bomb -->
+
+        <!-- ══════════════════════════════════════
+             PHASE 3 — ATTENTE DE PUBLICATION
+        ══════════════════════════════════════ -->
+        <div id="phase-attente" class="jeu-phase" style="display:none">
+
+          <div class="phase-stepper">
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Début</span></div>
+            <div class="ps-line done"></div>
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Collectif</span></div>
+            <div class="ps-line done"></div>
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Bombardement</span></div>
+            <div class="ps-line"></div>
+            <div class="phase-step active"><span class="ps-ico">⏳</span><span class="ps-lbl">Résultats</span></div>
+          </div>
+
+          <div class="attente-card">
+            <div class="att-spinner">
+              <div class="att-ring"></div>
+              <div class="att-logo">WBG</div>
+            </div>
+            <div class="att-title">Délibération en cours</div>
+            <div class="att-sub">Le jury finalise les scores et vérifie les résultats.<br>Les résultats seront publiés dans quelques instants.</div>
+            <div class="att-pulse-bar"><div class="att-pulse-fill"></div></div>
+            <div class="att-meta">Match terminé · En attente de validation officielle</div>
+          </div>
+
+        </div><!-- /phase-attente -->
+
+        <!-- ══════════════════════════════════════
+             PHASE 4 — RÉSULTATS PUBLIÉS + MVP
+        ══════════════════════════════════════ -->
+        <div id="phase-resultats" class="jeu-phase" style="display:none">
+
+          <div class="phase-stepper">
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Début</span></div>
+            <div class="ps-line done"></div>
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Collectif</span></div>
+            <div class="ps-line done"></div>
+            <div class="phase-step done"><span class="ps-ico">✓</span><span class="ps-lbl">Bombardement</span></div>
+            <div class="ps-line done"></div>
+            <div class="phase-step done"><span class="ps-ico">🏆</span><span class="ps-lbl">Résultats</span></div>
+          </div>
+
+          <!-- Vainqueur -->
+          <div class="winner-card" id="winner-card">
+            <div class="wc-confetti" aria-hidden="true">🎉</div>
+            <div class="wc-label">Vainqueur du match</div>
+            <div class="wc-team-name" id="wc-winner-name">Les Éclaireurs</div>
+            <div class="wc-score-final">
+              <span class="wc-sv a" id="wc-sa">78</span>
+              <span class="wc-sep">–</span>
+              <span class="wc-sv b" id="wc-sb">56</span>
+            </div>
+            <div class="wc-sub">Score final · Collectif + Individuel</div>
+          </div>
+
+          <!-- MVP -->
+          <div class="mvp-match-card">
+            <div class="mmc-header">
+              <div class="mmc-trophy">🏆</div>
+              <div>
+                <div class="mmc-label">MVP du match</div>
+                <div class="mmc-edition">Demi-Finale — 4ème Édition 2026</div>
+              </div>
+            </div>
+            <div class="mmc-body">
+              <div class="mmc-avatar" id="mmc-av">JD</div>
+              <div class="mmc-info">
+                <div class="mmc-name" id="mmc-name">Jean-David Pierre</div>
+                <div class="mmc-team" id="mmc-team">Les Éclaireurs · Capitaine</div>
+                <div class="mmc-stats">
+                  <div class="mmc-stat"><div class="mmc-sv" id="mmc-pts">+40</div><div class="mmc-sl">Points indiv.</div></div>
+                  <div class="mmc-stat"><div class="mmc-sv" id="mmc-q">12/14</div><div class="mmc-sl">Réponses</div></div>
+                  <div class="mmc-stat"><div class="mmc-sv" id="mmc-pct">86%</div><div class="mmc-sl">Précision</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tableau final complet -->
+          <div class="sb-card" style="margin-top:16px">
+            <div class="sb-head"><div class="sb-head-title">Résultats complets</div></div>
+            <div style="padding:0">
+              <table style="width:100%;border-collapse:collapse">
+                <thead style="background:var(--navy)">
+                  <tr>
+                    <th style="padding:10px 16px;text-align:left;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--gold);letter-spacing:.14em;text-transform:uppercase">Joueur</th>
+                    <th style="padding:10px 16px;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--gold);letter-spacing:.14em;text-transform:uppercase">Équipe</th>
+                    <th style="padding:10px 16px;text-align:right;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--gold);letter-spacing:.14em;text-transform:uppercase">Individuel</th>
+                    <th style="padding:10px 16px;text-align:right;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--gold);letter-spacing:.14em;text-transform:uppercase">Collectif</th>
+                    <th style="padding:10px 16px;text-align:right;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--gold);letter-spacing:.14em;text-transform:uppercase">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="final-result-body"><!-- rendered by JS --></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Démo demo nav -->
+          <div style="text-align:center;margin-top:14px">
+            <button class="fs-btn" onclick="setPhase('collectif')">↺ Recommencer la démo</button>
+          </div>
+
+        </div><!-- /phase-resultats -->
+
+        <!-- DÉMO NAVIGATION (visible en dev, peut être retiré en prod) -->
+        <div class="demo-phase-nav">
+          <span style="font-family:var(--ff-m);font-size:9px;color:var(--muted);letter-spacing:.1em">DÉMO PHASES :</span>
+          <button onclick="setPhase('collectif')" class="dpn-btn" id="dpn-c">🎯 Collectif</button>
+          <button onclick="setPhase('bomb')"      class="dpn-btn" id="dpn-b">💥 Bombardement</button>
+          <button onclick="setPhase('attente')"   class="dpn-btn" id="dpn-a">⏳ Attente</button>
+          <button onclick="setPhase('resultats')" class="dpn-btn" id="dpn-r">🏆 Résultats</button>
         </div>
-      </div>
+
+      </div><!-- /col principale -->
+
+      <!-- ══ SIDEBAR DROITE ══ -->
       <div class="sidebar">
         <div class="sc">
           <div class="sc-head">Prochains matchs</div>
@@ -1192,9 +1729,30 @@ footer { background: #050d1a; border-top: 3px solid var(--gold); padding: 40px 3
           </div>
           <div style="padding:10px 14px;border-top:1px solid rgba(27,42,107,.06);text-align:right"><a class="sh-link" onclick="switchTab('classement',document.querySelectorAll('.ph-tab')[2])">Classement complet →</a></div>
         </div>
+        <!-- Score live sidebar -->
+        <div class="sc" id="sb-sidebar-score">
+          <div class="sc-head">Score en direct</div>
+          <div class="sc-body">
+            <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center;padding:4px 0">
+              <div>
+                <div style="font-family:var(--ff-h);font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase" id="sb-side-na">Les Éclaireurs</div>
+                <div style="font-family:var(--ff-h);font-size:40px;font-weight:900;color:var(--blue)" id="sb-side-sa">14</div>
+                <div style="font-family:var(--ff-m);font-size:8px;color:var(--muted)">Éq. A</div>
+              </div>
+              <div style="font-family:var(--ff-h);font-size:22px;color:var(--muted)">–</div>
+              <div>
+                <div style="font-family:var(--ff-h);font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase" id="sb-side-nb">Alpha Genius</div>
+                <div style="font-family:var(--ff-h);font-size:40px;font-weight:900;color:var(--navy)" id="sb-side-sb">11</div>
+                <div style="font-family:var(--ff-m);font-size:8px;color:var(--muted)">Éq. B</div>
+              </div>
+            </div>
+            <div style="font-family:var(--ff-m);font-size:9px;color:var(--muted);text-align:center;margin-top:6px;padding-top:8px;border-top:1px solid rgba(27,42,107,.06)" id="sb-side-phase">Collectif · Rubrique 3/10</div>
+          </div>
+        </div>
       </div>
+
     </div>
-  </div>
+  </div><!-- /tab-scoreboard -->
 
   <!-- TAB : CALENDRIER -->
   <div class="tab-panel" id="tab-calendrier">
@@ -1524,7 +2082,7 @@ footer { background: #050d1a; border-top: 3px solid var(--gold); padding: 40px 3
       <div class="contact-info-card">
         <div class="ci-box">
           <div class="ci-title">Informations de contact</div>
-          <div class="ci-row"><div class="ci-ico">📧</div><div><div class="ci-label">Email</div><div class="ci-val">contact@wbg.ht</div></div></div>
+          <div class="ci-row"><div class="ci-ico">📧</div><div><div class="ci-label">Email</div><div class="ci-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="97f4f8f9e3f6f4e3d7e0f5f0b9ffe3">[email&#160;protected]</a></div></div></div>
           <div class="ci-row"><div class="ci-ico">📞</div><div><div class="ci-label">Téléphone</div><div class="ci-val">+509 XXXX-XXXX</div></div></div>
           <div class="ci-row"><div class="ci-ico">📍</div><div><div class="ci-label">Localisation</div><div class="ci-val">Port-au-Prince, Haïti</div></div></div>
           <div class="ci-row"><div class="ci-ico">🕐</div><div><div class="ci-label">Disponibilités</div><div class="ci-val">Lun–Ven · 8h–17h</div></div></div>
@@ -1883,7 +2441,7 @@ footer { background: #050d1a; border-top: 3px solid var(--gold); padding: 40px 3
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ══════════════════════════════════════════════
    GLOBAL STATE
 ══════════════════════════════════════════════ */
@@ -1925,6 +2483,7 @@ function openAdmin() {
 }
 
 function openPublicBomb() {
+  // Open the public bomb view in admin page context (switch to ligue for demo)
   toast('Vue publique Bombardement — utilisez un 2e écran', 'ok');
 }
 
@@ -2501,6 +3060,293 @@ setInterval(()=>{
     }
   }
 },4500);
+
+/* ══════════════════════════════════════════════
+   PANEL JEU PUBLIC — GESTION DES PHASES
+   Phase 1 : Collectif (rubriques)
+   Phase 2 : Bombardement individuel
+   Phase 3 : Attente de publication
+   Phase 4 : Résultats + MVP
+══════════════════════════════════════════════ */
+
+/* État du jeu public (démo) */
+const JEU = {
+  phase: 'collectif', // collectif | bomb | attente | resultats
+  sa: 14, sb: 11,
+  nameA: 'Les Éclaireurs', nameB: 'Alpha Genius',
+  schoolA: 'COLLÈGE SAINT-JOSEPH', schoolB: 'INST. SAINT-FRANÇOIS',
+  timerSec: 504, timerMax: 600,
+  turnTeam: 'a', // équipe dont c'est le tour
+  qNum: 7, qTot: 12,
+  rubActive: 'Culture Générale', rubIdx: 2,
+  rubriques: [
+    { n:'Mathématiques',    done:true,  active:false, reserve:false, sa:30, sb:20 },
+    { n:'Sciences naturelles', done:true, active:false, reserve:false, sa:20, sb:25 },
+    { n:'Culture Générale', done:false, active:true,  reserve:false, sa:14, sb:11 },
+    { n:'Histoire & Géo',   done:false, active:false, reserve:false, sa:0,  sb:0  },
+    { n:'Littérature',      done:false, active:false, reserve:false, sa:0,  sb:0  },
+    { n:'Technologies',     done:false, active:false, reserve:false, sa:0,  sb:0  },
+    { n:'Musique & Arts',   done:false, active:false, reserve:false, sa:0,  sb:0  },
+    { n:'Sport & Santé',    done:false, active:false, reserve:false, sa:0,  sb:0  },
+    { n:'Philosophie',      done:false, active:false, reserve:false, sa:0,  sb:0  },
+    { n:'Réserve A',        done:false, active:false, reserve:true,  sa:0,  sb:0  },
+  ],
+  // Bombardement
+  currPlayerIdx: 2,
+  players: [
+    { n:'Jean-David Pierre', tm:'a', sc:40, done:false },
+    { n:'Marie-Claire Louis', tm:'b', sc:35, done:true  },
+    { n:'Roodly Jean',        tm:'a', sc:28, done:true  },
+    { n:'Sophie Marcelin',    tm:'b', sc:22, done:false },
+    { n:'Carla Beaumont',     tm:'a', sc:18, done:false },
+    { n:'Marc Antoine',       tm:'b', sc:15, done:false },
+  ],
+  bombTimerSec: 60, bombTimerMax: 60,
+  // MVP
+  mvp: { n:'Jean-David Pierre', initials:'JD', team:'Les Éclaireurs · Capitaine', pts:'+40', q:'12/14', pct:'86%' },
+  // Résultats finaux
+  finalSa: 78, finalSb: 56,
+};
+
+/* ── setPhase : bascule entre les phases ── */
+function setPhase(phase) {
+  JEU.phase = phase;
+  ['collectif','bomb','attente','resultats'].forEach(p => {
+    const el = document.getElementById('phase-' + p);
+    if (el) el.style.display = p === phase ? 'block' : 'none';
+  });
+  // Activer bouton demo
+  ['c','b','a','r'].forEach((k,i) => {
+    const map = {c:'collectif',b:'bomb',a:'attente',r:'resultats'};
+    const btn = document.getElementById('dpn-'+k);
+    if (btn) btn.classList.toggle('active', map[k] === phase);
+  });
+  // Mettre à jour le titre et la sidebar
+  const titles = {
+    collectif:'Série collective — En cours',
+    bomb:'Bombardement individuel — En cours',
+    attente:'Match terminé — Délibération',
+    resultats:'Résultats officiels publiés'
+  };
+  const el = document.getElementById('jeu-sh-title');
+  if (el) el.textContent = titles[phase] || 'Match en cours';
+
+  if (phase === 'collectif') renderPhaseCollectif();
+  if (phase === 'bomb')      renderPhaseBomb();
+  if (phase === 'resultats') renderPhaseResultats();
+  updateSidebarScore();
+}
+
+/* ── PHASE COLLECTIF ── */
+function renderPhaseCollectif() {
+  // Rubrique name
+  const rub = JEU.rubriques.find(r => r.active) || JEU.rubriques[JEU.rubIdx];
+  const rubName = rub ? rub.n : JEU.rubActive;
+  const done = JEU.rubriques.filter(r => r.done).length;
+
+  const el = id => document.getElementById(id);
+  if (el('rac-rub-name')) el('rac-rub-name').textContent = rubName;
+  if (el('rac-rub-count')) el('rac-rub-count').textContent = `Rubrique ${done+1} / 10`;
+
+  // Équipe à répondre
+  if (el('rtt-team-name')) el('rtt-team-name').textContent = JEU.turnTeam === 'a' ? JEU.nameA : JEU.nameB;
+  const badge = document.querySelector('.rtt-team-badge');
+  if (badge) {
+    badge.textContent = 'Équipe ' + JEU.turnTeam.toUpperCase();
+    badge.className = 'rtt-team-badge ' + (JEU.turnTeam === 'a' ? 'badge-a-pill' : 'badge-b-pill');
+  }
+
+  // Question
+  if (el('rqs-qnum')) el('rqs-qnum').textContent = JEU.qNum;
+  if (el('rqs-qtot')) el('rqs-qtot').textContent = JEU.qTot;
+
+  // Scores
+  if (el('rac-na')) el('rac-na').textContent = JEU.nameA;
+  if (el('rac-nb')) el('rac-nb').textContent = JEU.nameB;
+  if (el('rac-sa')) el('rac-sa').textContent = JEU.sa;
+  if (el('rac-sb')) el('rac-sb').textContent = JEU.sb;
+
+  // Timer
+  const mm = String(Math.floor(JEU.timerSec/60)).padStart(2,'0');
+  const ss = String(JEU.timerSec%60).padStart(2,'0');
+  if (el('rac-timer')) el('rac-timer').textContent = `${mm}:${ss}`;
+
+  // Progression rubriques
+  if (el('rub-prog-txt')) el('rub-prog-txt').textContent = `${done} / 10 complétées`;
+  if (el('rub-prog-bar')) el('rub-prog-bar').style.width = (done/10*100) + '%';
+
+  const list = document.getElementById('rub-prog-list');
+  if (list) {
+    list.innerHTML = JEU.rubriques.map((r, i) => {
+      const cls = r.reserve ? 'reserve' : r.active ? 'active' : r.done ? 'done' : '';
+      const tgCls = r.active ? 'active' : r.done ? 'done' : r.reserve ? 'reserve' : 'wait';
+      const tgTxt = r.active ? '● Active' : r.done ? '✓ Terminée' : r.reserve ? 'Réserve' : 'En attente';
+      return `<div class="rpl-row ${cls}">
+        <div class="rpl-idx">${r.reserve ? '⊕' : i+1}</div>
+        <div class="rpl-nm">${r.n}</div>
+        ${(r.done||r.active) ? `<div class="rpl-scores"><b class="a">${r.sa}</b> – <b class="b">${r.sb}</b></div>` : ''}
+        <span class="rpl-tag ${tgCls}">${tgTxt}</span>
+      </div>`;
+    }).join('');
+  }
+}
+
+/* ── PHASE BOMB ── */
+function renderPhaseBomb() {
+  const el = id => document.getElementById(id);
+  const p = JEU.players[JEU.currPlayerIdx];
+  if (!p) return;
+
+  // Recap collectif
+  if (el('cr-na')) el('cr-na').textContent = JEU.nameA;
+  if (el('cr-nb')) el('cr-nb').textContent = JEU.nameB;
+  if (el('cr-sa')) el('cr-sa').textContent = JEU.sa;
+  if (el('cr-sb')) el('cr-sb').textContent = JEU.sb;
+
+  // Joueur actuel
+  if (el('bcc-order')) el('bcc-order').textContent = `Joueur ${JEU.currPlayerIdx+1} / ${JEU.players.length}`;
+  if (el('bcc-name')) el('bcc-name').textContent = p.n;
+  const pill = el('bcc-team');
+  if (pill) {
+    pill.textContent = `Équipe ${p.tm.toUpperCase()} · ${p.tm==='a'?JEU.nameA:JEU.nameB}`;
+    pill.className = 'bcc-team-pill ' + p.tm;
+  }
+
+  // Timer
+  const ts = JEU.bombTimerSec;
+  if (el('bcc-timer')) el('bcc-timer').textContent = `${Math.floor(ts/60)}:${String(ts%60).padStart(2,'0')}`;
+  if (el('bcc-timer-bar')) el('bcc-timer-bar').style.width = (ts/JEU.bombTimerMax*100)+'%';
+
+  if (el('bcc-score')) el('bcc-score').textContent = (p.sc>=0?'+':'')+p.sc+' pts';
+
+  // Queue
+  const queueEl = el('bomb-queue-list');
+  if (queueEl) {
+    queueEl.innerHTML = JEU.players.map((pl, i) => {
+      const cls = pl.done ? 'done' : i===JEU.currPlayerIdx ? 'curr' : 'wait';
+      const prefix = pl.done ? '✓' : i===JEU.currPlayerIdx ? '▶' : `${i+1}.`;
+      return `<span class="bql-item ${cls}">${prefix} ${pl.n}</span>`;
+    }).join('');
+  }
+  if (el('bomb-q-status')) el('bomb-q-status').textContent = JEU.players.filter(p=>!p.done).length+' restants';
+
+  // Classement individuel
+  const rankBody = el('bomb-rank-body');
+  if (rankBody) {
+    const sorted = [...JEU.players].filter(p=>p.done||JEU.players.indexOf(p)<=JEU.currPlayerIdx).sort((a,b)=>b.sc-a.sc);
+    rankBody.innerHTML = sorted.map((pl, i) => `
+      <tr style="${i===0?'background:rgba(232,168,0,.04)':''}">
+        <td style="padding:8px 14px;font-family:var(--ff-m);font-size:10px;font-weight:700;color:${i===0?'var(--gold)':'var(--muted)'}">${i===0?'🥇':i+1}</td>
+        <td style="padding:8px 14px;font-weight:600;color:var(--navy)">${pl.n}</td>
+        <td style="padding:8px 14px"><span style="font-family:var(--ff-m);font-size:8px;font-weight:700;padding:2px 7px;border-radius:7px;background:${pl.tm==='a'?'rgba(30,111,217,.1)':'rgba(27,42,107,.07)'};color:${pl.tm==='a'?'var(--blue)':'var(--navy)'}">Éq.${pl.tm.toUpperCase()}</span></td>
+        <td style="padding:8px 14px;text-align:right;font-family:var(--ff-m);font-weight:700;color:${pl.sc>=0?'var(--green)':'var(--red)'}">${pl.sc>=0?'+':''}${pl.sc}</td>
+      </tr>`).join('');
+  }
+}
+
+/* ── PHASE RÉSULTATS ── */
+function renderPhaseResultats() {
+  const el = id => document.getElementById(id);
+  // Vainqueur
+  const winner = JEU.finalSa >= JEU.finalSb ? JEU.nameA : JEU.nameB;
+  if (el('wc-winner-name')) el('wc-winner-name').textContent = winner;
+  if (el('wc-sa')) el('wc-sa').textContent = JEU.finalSa;
+  if (el('wc-sb')) el('wc-sb').textContent = JEU.finalSb;
+
+  // MVP
+  const mv = JEU.mvp;
+  if (el('mmc-av'))   el('mmc-av').textContent = mv.initials;
+  if (el('mmc-name')) el('mmc-name').textContent = mv.n;
+  if (el('mmc-team')) el('mmc-team').textContent = mv.team;
+  if (el('mmc-pts'))  el('mmc-pts').textContent = mv.pts;
+  if (el('mmc-q'))    el('mmc-q').textContent = mv.q;
+  if (el('mmc-pct'))  el('mmc-pct').textContent = mv.pct;
+
+  // Tableau final
+  const tbody = el('final-result-body');
+  if (tbody) {
+    const collectifRow = `<tr style="background:var(--off)">
+      <td style="padding:9px 16px;font-weight:700;color:var(--navy);border-bottom:1px solid var(--line)">Série collective</td>
+      <td style="padding:9px 16px;border-bottom:1px solid var(--line)">—</td>
+      <td style="padding:9px 16px;text-align:right;border-bottom:1px solid var(--line)">—</td>
+      <td style="padding:9px 16px;text-align:right;font-family:var(--ff-m);font-weight:700;color:var(--navy);border-bottom:1px solid var(--line)">A:${JEU.sa} B:${JEU.sb}</td>
+      <td style="padding:9px 16px;text-align:right;border-bottom:1px solid var(--line)">—</td>
+    </tr>`;
+    const rows = JEU.players.map(p => {
+      const coll = p.tm==='a' ? JEU.sa : JEU.sb;
+      return `<tr>
+        <td style="padding:9px 16px;font-weight:700;color:var(--navy);border-bottom:1px solid var(--line)">${p.n}</td>
+        <td style="padding:9px 16px;border-bottom:1px solid var(--line)"><span style="font-family:var(--ff-m);font-size:9px;font-weight:700;padding:2px 8px;border-radius:8px;background:${p.tm==='a'?'rgba(30,111,217,.1)':'rgba(27,42,107,.07)'};color:${p.tm==='a'?'var(--blue)':'var(--navy)'}">Éq.${p.tm.toUpperCase()}</span></td>
+        <td style="padding:9px 16px;text-align:right;font-family:var(--ff-m);font-weight:700;color:var(--blue);border-bottom:1px solid var(--line)">${p.sc>=0?'+':''}${p.sc}</td>
+        <td style="padding:9px 16px;text-align:right;font-family:var(--ff-m);font-weight:700;color:var(--muted);border-bottom:1px solid var(--line)">${coll}</td>
+        <td style="padding:9px 16px;text-align:right;font-family:var(--ff-h);font-size:15px;font-weight:900;color:var(--navy);border-bottom:1px solid var(--line)">${p.sc+coll}</td>
+      </tr>`;
+    }).join('');
+    tbody.innerHTML = collectifRow + rows;
+  }
+}
+
+/* ── SIDEBAR score ── */
+function updateSidebarScore() {
+  const el = id => document.getElementById(id);
+  if (el('sb-side-na')) el('sb-side-na').textContent = JEU.nameA;
+  if (el('sb-side-nb')) el('sb-side-nb').textContent = JEU.nameB;
+  if (JEU.phase === 'resultats') {
+    if (el('sb-side-sa')) el('sb-side-sa').textContent = JEU.finalSa;
+    if (el('sb-side-sb')) el('sb-side-sb').textContent = JEU.finalSb;
+    if (el('sb-side-phase')) el('sb-side-phase').textContent = 'Score final officiel';
+  } else {
+    const totA = JEU.sa + JEU.players.filter(p=>p.tm==='a').reduce((s,p)=>s+p.sc,0);
+    const totB = JEU.sb + JEU.players.filter(p=>p.tm==='b').reduce((s,p)=>s+p.sc,0);
+    if (el('sb-side-sa')) el('sb-side-sa').textContent = totA;
+    if (el('sb-side-sb')) el('sb-side-sb').textContent = totB;
+    const phTxt = {collectif:'Collectif · Rubrique '+((JEU.rubriques.filter(r=>r.done).length)+1)+'/10', bomb:'Bombardement individuel', attente:'Délibération jury'};
+    if (el('sb-side-phase')) el('sb-side-phase').textContent = phTxt[JEU.phase] || '';
+  }
+}
+
+/* ── Timer collectif ── */
+setInterval(function() {
+  if (JEU.phase !== 'collectif') return;
+  JEU.timerSec = Math.max(0, JEU.timerSec - 1);
+  const el = document.getElementById('rac-timer');
+  if (el) {
+    const mm = String(Math.floor(JEU.timerSec/60)).padStart(2,'0');
+    const ss = String(JEU.timerSec%60).padStart(2,'0');
+    el.textContent = `${mm}:${ss}`;
+    el.style.color = JEU.timerSec <= 30 ? 'var(--red)' : 'var(--gold)';
+  }
+}, 1000);
+
+/* ── Timer bombardement ── */
+setInterval(function() {
+  if (JEU.phase !== 'bomb') return;
+  JEU.bombTimerSec = Math.max(0, JEU.bombTimerSec - 1);
+  const et = document.getElementById('bcc-timer');
+  const eb = document.getElementById('bcc-timer-bar');
+  if (et) {
+    et.textContent = `${Math.floor(JEU.bombTimerSec/60)}:${String(JEU.bombTimerSec%60).padStart(2,'0')}`;
+    et.style.color = JEU.bombTimerSec <= 10 ? 'var(--red)' : 'var(--navy)';
+  }
+  if (eb) eb.style.width = (JEU.bombTimerSec/JEU.bombTimerMax*100)+'%';
+}, 1000);
+
+/* ── Demo simulation ── */
+let _jeuSim = 0;
+const _jeuEvents = [
+  ()=>{ JEU.sa = Math.max(0,JEU.sa+10); JEU.rubriques[2].sa+=10; JEU.qNum++; JEU.turnTeam='b'; renderPhaseCollectif(); updateSidebarScore(); },
+  ()=>{ JEU.sb = Math.max(0,JEU.sb+8);  JEU.rubriques[2].sb+=8;  JEU.qNum++; JEU.turnTeam='a'; renderPhaseCollectif(); updateSidebarScore(); },
+  ()=>{ JEU.sb = Math.max(0,JEU.sb-5);  JEU.qNum++; JEU.turnTeam='b'; renderPhaseCollectif(); updateSidebarScore(); },
+  ()=>{ JEU.sa = Math.max(0,JEU.sa+10); JEU.qNum++; JEU.turnTeam='a'; renderPhaseCollectif(); updateSidebarScore(); },
+];
+setInterval(function() {
+  if (JEU.phase !== 'collectif') return;
+  _jeuEvents[_jeuSim % _jeuEvents.length]();
+  _jeuSim++;
+}, 4200);
+
+/* ── Init ── */
+setPhase('collectif');
 
 /* Countdown */
 function updateCountdown(){
