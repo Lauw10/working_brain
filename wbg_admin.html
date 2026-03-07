@@ -6,1275 +6,1095 @@
 <title>WBG — Administration</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════════════
-   DESIGN SYSTEM — palette WBG Admin
-══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — identique au site public
+   Fond: #F8F7F2 · Navy: #1B2A6B · Gold: #E8A800
+═══════════════════════════════════════════ */
 :root {
-  --navy:   #1B2A6B;
-  --navy-d: #131e4f;
-  --navy-l: #243382;
-  --gold:   #E8A800;
-  --gold-l: #F5BE00;
-  --white:  #FFFFFF;
-  --off:    #F4F6FA;
-  --cream:  #F8F7F2;
-  --gray:   #555B6E;
-  --muted:  #8891A5;
-  --red:    #D63031;
-  --green:  #00B894;
-  --orange: #E17055;
-  --blue:   #1E6FD9;
-
+  --navy:    #1B2A6B;
+  --navy-d:  #131E4F;
+  --navy-l:  #243382;
+  --gold:    #E8A800;
+  --gold-l:  #F5C300;
+  --cream:   #F8F7F2;
+  --off:     #F0F1F7;
+  --white:   #FFFFFF;
+  --text:    #1B2A6B;
+  --gray:    #4A5272;
+  --muted:   #8891A5;
+  --line:    rgba(27,42,107,.1);
+  --red:     #D63031;
+  --green:   #00B894;
+  --orange:  #E17055;
+  --blue:    #1E6FD9;
   --ff-h: 'Barlow Condensed', sans-serif;
   --ff-b: 'Barlow', sans-serif;
   --ff-m: 'Roboto Mono', monospace;
-  --r: 10px;
-  --shadow: 0 4px 28px rgba(27,42,107,.12);
-  --shadow-lg: 0 12px 48px rgba(27,42,107,.18);
+  --r:    10px;
+  --sh:   0 2px 20px rgba(27,42,107,.08);
+  --sh-md:0 6px 32px rgba(27,42,107,.12);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:var(--ff-b);background:var(--cream);color:var(--text);}
+
+/* ════════════════════ LOGIN ════════════════════ */
+#login{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-d) 100%);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .4s,visibility .4s;
+}
+#login::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 60% 40%,rgba(232,168,0,.08),transparent 55%),
+    repeating-linear-gradient(45deg,rgba(255,255,255,.014) 0,rgba(255,255,255,.014) 1px,transparent 1px,transparent 44px);
+}
+#login.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.lc{
+  position:relative;z-index:1;
+  background:var(--white);border-radius:14px;padding:38px 34px;width:360px;
+  box-shadow:0 32px 80px rgba(0,0,0,.35);
+}
+.lc::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--navy),var(--gold));border-radius:14px 14px 0 0;}
+.lc-badge{
+  width:54px;height:54px;border-radius:50%;background:var(--navy);margin:0 auto 14px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-h);font-size:18px;font-weight:900;color:var(--gold);
+  border:3px solid rgba(232,168,0,.2);
+}
+.lc-title{font-family:var(--ff-h);font-size:28px;font-weight:900;color:var(--navy);text-align:center;text-transform:uppercase;letter-spacing:.06em;}
+.lc-sub{font-family:var(--ff-m);font-size:9px;color:var(--muted);text-align:center;letter-spacing:.16em;text-transform:uppercase;margin-bottom:26px;margin-top:3px;}
+.lf{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+.ll{font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--navy);letter-spacing:.2em;text-transform:uppercase;opacity:.55;}
+.li{
+  background:var(--off);border:1.5px solid var(--line);border-radius:8px;
+  padding:9px 13px;font-family:var(--ff-b);font-size:13px;color:var(--navy);
+  outline:none;transition:border-color .2s;width:100%;
+}
+.li:focus{border-color:var(--gold);}
+.li::placeholder{color:var(--muted);}
+.li-sel{background:var(--off);border:1.5px solid var(--line);border-radius:8px;padding:9px 13px;font-family:var(--ff-b);font-size:13px;color:var(--navy);outline:none;transition:border-color .2s;width:100%;cursor:pointer;}
+.li-sel:focus{border-color:var(--gold);}
+.lbtn{
+  width:100%;background:var(--navy);color:var(--gold);border:none;border-radius:24px;
+  padding:12px;font-family:var(--ff-h);font-size:16px;font-weight:800;cursor:pointer;
+  letter-spacing:.06em;text-transform:uppercase;margin-top:4px;transition:all .2s;
+}
+.lbtn:hover{background:var(--navy-l);transform:translateY(-1px);box-shadow:0 6px 20px rgba(27,42,107,.25);}
+.ldemoe{text-align:center;margin-top:10px;font-size:11px;color:var(--muted);font-family:var(--ff-m);}
+.ldemoe a{color:var(--navy);font-weight:700;cursor:pointer;text-decoration:underline;}
+
+/* ════════════════════ LAYOUT ════════════════════ */
+#app{display:flex;height:100vh;overflow:hidden;}
+
+/* ════════════════════ SIDEBAR ════════════════════
+   Style identique à la nav du site public
+   (fond blanc, texte navy, accents gold)
+════════════════════════════════════════════════ */
+#sidebar{
+  width:230px;flex-shrink:0;
+  background:var(--white);
+  border-right:1px solid var(--line);
+  box-shadow:2px 0 16px rgba(27,42,107,.06);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.sb-top{
+  background:var(--navy);padding:16px 18px;
+  border-bottom:3px solid var(--gold);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.sb-badge{
+  width:40px;height:40px;border-radius:50%;background:var(--gold);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-h);font-size:15px;font-weight:900;color:var(--navy);
+}
+.sb-sitename{font-family:var(--ff-h);font-size:15px;font-weight:800;color:#fff;line-height:1.2;letter-spacing:.04em;}
+.sb-sitename em{color:var(--gold);font-style:normal;}
+.sb-edition{font-family:var(--ff-m);font-size:8px;color:rgba(255,255,255,.4);letter-spacing:.14em;text-transform:uppercase;margin-top:2px;}
+
+.sb-nav{flex:1;overflow-y:auto;padding:10px 0;}
+.sb-section{
+  font-family:var(--ff-m);font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);padding:14px 18px 5px;
+}
+.sb-item{
+  display:flex;align-items:center;gap:9px;padding:9px 18px;
+  font-family:var(--ff-h);font-size:14px;font-weight:700;color:var(--gray);
+  cursor:pointer;border-left:3px solid transparent;
+  letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
+  position:relative;
+}
+.sb-item:hover{color:var(--navy);background:var(--off);}
+.sb-item.active{color:var(--navy);background:var(--off);border-left-color:var(--gold);}
+.sb-item .ico{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.sb-badge-ct{
+  margin-left:auto;font-family:var(--ff-m);font-size:8px;font-weight:700;
+  background:var(--gold);color:var(--navy);padding:1px 7px;border-radius:8px;
 }
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body { font-family: var(--ff-b); background: #0B1120; color: #fff; overflow: hidden; height: 100vh; }
-
-/* ══════════════════════════════════════════════
-   TOAST + MODAL
-══════════════════════════════════════════════ */
-.toasts { position:fixed;bottom:14px;right:14px;z-index:9999;display:flex;flex-direction:column;gap:5px; }
-.toast { background:#111827;border:1px solid rgba(255,255,255,.09);border-radius:7px;padding:9px 14px;display:flex;align-items:center;gap:7px;font-size:12px;color:#fff;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:tsin .2s ease;border-left:3px solid var(--green); }
-.toast.w { border-left-color:var(--orange); }
-.toast.e { border-left-color:var(--red); }
-@keyframes tsin { from{transform:translateX(28px);opacity:0}to{transform:translateX(0);opacity:1} }
-
-.modal-bg { display:none;position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,.72);align-items:center;justify-content:center; }
-.modal-bg.open { display:flex; }
-.modal-box { background:#111827;border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:22px;width:306px;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:mpop .17s ease; }
-@keyframes mpop { from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1} }
-.modal-box h3 { font-family:var(--ff-h);font-size:17px;color:#fff;margin-bottom:5px;text-transform:uppercase; }
-.modal-box p { font-size:12px;color:rgba(255,255,255,.45);margin-bottom:15px;line-height:1.5; }
-.modal-btns { display:flex;gap:8px;justify-content:flex-end; }
-.mbtn-c { padding:6px 13px;border-radius:12px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.09);font-size:11px;cursor:pointer;font-family:var(--ff-b); }
-.mbtn-ok { padding:6px 13px;border-radius:12px;background:var(--green);color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--ff-b); }
-
-/* ══════════════════════════════════════════════
-   FULLSCREEN SCOREBOARD
-══════════════════════════════════════════════ */
-.fs-overlay {
-  display: none; position: fixed; inset: 0; z-index: 9500;
-  background: var(--white);
-  flex-direction: column; align-items: center; justify-content: center;
+.sb-bottom{padding:14px 18px;border-top:1px solid var(--line);flex-shrink:0;}
+.sb-user{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.sb-avatar{
+  width:34px;height:34px;border-radius:50%;background:var(--navy);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-h);font-size:13px;font-weight:900;color:var(--gold);
 }
-.fs-overlay.active { display: flex; }
-.fs-close { position: absolute; top: 20px; right: 20px; background: rgba(27,42,107,.1); border: none; color: var(--navy); width: 42px; height: 42px; border-radius: 50%; font-size: 18px; cursor: pointer; transition: all .2s; }
-.fs-close:hover { background: var(--navy); color: var(--gold); }
-.fs-wm { position: absolute; right: -50px; bottom: -50px; width: 380px; height: 380px; opacity: .05; }
-.fs-topbar { font-family: var(--ff-h); font-size: 13px; font-weight: 800; letter-spacing: .36em; color: var(--navy); text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; z-index: 1; }
-.fs-schools { display: flex; z-index: 1; margin-bottom: 0; width: min(900px, 92vw); border-radius: 8px 8px 0 0; overflow: hidden; border-top: 3px solid var(--gold); }
-.fs-school { flex: 1; background: var(--navy); color: #fff; font-family: var(--ff-h); font-size: clamp(10px,1.2vw,14px); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 10px 22px; display: flex; align-items: center; }
-.fs-school.r { justify-content: flex-end; }
-.fs-school-sep { background: var(--navy); display: flex; align-items: center; justify-content: center; padding: 0 4px; }
-.fs-school-sep::after { content: ''; width: 2px; height: 60%; background: var(--gold); display: block; }
-.fs-main { background: var(--navy); width: min(900px, 92vw); border-radius: 0 0 22px 22px; padding: 28px 20px 32px; display: grid; grid-template-columns: 120px 1fr 120px; align-items: center; box-shadow: var(--shadow-lg); z-index: 1; }
-.fs-logo { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.fs-logo-circle { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--gold); background: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--ff-h); font-size: 20px; font-weight: 900; color: var(--navy); }
-.fs-scores { display: flex; align-items: center; justify-content: center; gap: 0; }
-.fs-sv { font-family: var(--ff-h); font-size: clamp(80px,14vw,160px); font-weight: 900; color: #fff; line-height: 1; min-width: clamp(120px,16vw,200px); text-align: center; letter-spacing: -.02em; transition: color .3s; }
-.fs-sv.flash { color: var(--gold); }
-.fs-sv-sep { width: 3px; height: clamp(60px,10vw,100px); background: var(--gold); margin: 0 14px; }
-.fs-tabs { display: flex; justify-content: center; gap: 8px; margin-top: 14px; z-index: 1; flex-wrap: wrap; }
-.fs-tab-pill { padding: 5px 16px; border-radius: 14px; font-family: var(--ff-h); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; border: 1.5px solid rgba(27,42,107,.15); background: rgba(27,42,107,.07); color: var(--navy); }
-.fs-tab-pill.act { background: var(--gold); color: var(--navy); border-color: var(--gold); }
-.fs-tab-pill.dn { background: var(--navy); color: #fff; border-color: var(--navy); }
-.fs-footer { font-family: var(--ff-h); font-size: clamp(12px,1.8vw,18px); font-weight: 800; letter-spacing: .3em; color: var(--navy); text-transform: uppercase; margin-top: 16px; z-index: 1; }
-
-/* ══════════════════════════════════════════════
-   LOGIN OVERLAY
-══════════════════════════════════════════════ */
-.login-overlay { position: fixed; inset: 0; z-index: 9999; background: #0B1120; display: flex; align-items: center; justify-content: center; transition: opacity .4s, visibility .4s; }
-.login-overlay.gone { opacity: 0; visibility: hidden; pointer-events: none; }
-.login-card { background: #111827; border: 1px solid rgba(255,255,255,.07); border-radius: 13px; padding: 32px; width: 316px; box-shadow: 0 24px 64px rgba(0,0,0,.5); position: relative; }
-.login-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--gold),var(--navy)); border-radius:13px 13px 0 0; }
-.login-logo { width:48px;height:48px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--ff-h);font-size:18px;font-weight:900;color:var(--navy);margin:0 auto 13px; }
-.login-title { font-family:var(--ff-h);font-size:20px;font-weight:900;color:#fff;text-align:center;margin-bottom:2px;letter-spacing:.06em;text-transform:uppercase; }
-.login-sub { font-size:10px;color:rgba(255,255,255,.25);text-align:center;margin-bottom:22px;font-family:var(--ff-m);letter-spacing:.1em; }
-.btn-login { width:100%;background:var(--gold);color:var(--navy);border:none;border-radius:18px;padding:10px;font-family:var(--ff-b);font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .2s; }
-.btn-login:hover { background:var(--gold-l); }
-
-/* ══════════════════════════════════════════════
-   ADMIN LAYOUT
-══════════════════════════════════════════════ */
-#admin-wrap {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-  background: #0B1120;
+.sb-uname{font-size:13px;font-weight:700;color:var(--navy);}
+.sb-urole{font-family:var(--ff-m);font-size:8px;color:var(--muted);letter-spacing:.06em;}
+.sb-quickbtns{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px;}
+.sqb{
+  padding:7px 6px;border-radius:8px;border:1.5px solid var(--line);
+  font-family:var(--ff-h);font-size:11px;font-weight:800;cursor:pointer;
+  letter-spacing:.04em;text-transform:uppercase;text-align:center;transition:all .15s;background:var(--off);color:var(--gray);
 }
-
-/* Admin sidebar */
-.adm-sb {
-  width: 210px; background: #111827;
-  border-right: 1px solid rgba(255,255,255,.06);
-  display: flex; flex-direction: column; flex-shrink: 0;
+.sqb:hover{background:var(--navy);color:var(--gold);border-color:var(--navy);}
+.sqb.gold-btn{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+.sqb.gold-btn:hover{background:var(--gold-l);}
+.sb-logout{
+  width:100%;padding:7px;border-radius:8px;background:transparent;
+  border:1.5px solid rgba(214,48,49,.25);color:var(--red);
+  font-family:var(--ff-h);font-size:11px;font-weight:700;cursor:pointer;
+  letter-spacing:.06em;text-transform:uppercase;transition:all .15s;
 }
-.adm-logo { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.06); display: flex; align-items: center; gap: 9px; }
-.adm-logo-badge { width: 32px; height: 32px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-family: var(--ff-h); font-size: 12px; font-weight: 900; color: var(--navy); flex-shrink: 0; }
-.adm-logo-text { font-family: var(--ff-h); font-size: 13px; font-weight: 700; color: #fff; line-height: 1.2; }
-.adm-logo-text span { color: var(--gold); }
-.adm-nav { flex: 1; padding: 6px 0; overflow-y: auto; }
-.adm-nav-sec { font-family: var(--ff-m); font-size: 9px; font-weight: 700; color: rgba(255,255,255,.2); letter-spacing: .18em; text-transform: uppercase; padding: 12px 14px 4px; }
-.adm-link { display: flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,.45); cursor: pointer; border-left: 3px solid transparent; transition: all .15s; }
-.adm-link:hover { color: #fff; background: rgba(255,255,255,.04); }
-.adm-link.on { color: var(--gold); background: rgba(232,168,0,.07); border-left-color: var(--gold); }
-.adm-link .ico { font-size: 13px; width: 16px; text-align: center; }
-.adm-sb-foot { padding: 12px 14px; border-top: 1px solid rgba(255,255,255,.06); }
-.adm-user { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.adm-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0; }
-.adm-uname { font-size: 11px; font-weight: 700; color: #fff; }
-.adm-urole { font-size: 9px; color: rgba(255,255,255,.3); font-family: var(--ff-m); }
-.view-btns-pub { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
-.vbtn { flex: 1; padding: 5px 3px; border-radius: 5px; border: none; font-size: 9px; font-weight: 700; cursor: pointer; font-family: var(--ff-b); transition: all .14s; white-space: nowrap; }
-.vbtn.col { background: rgba(27,42,107,.4); color: #6FA3E8; }
-.vbtn.col:hover { background: var(--navy); color: #fff; }
-.vbtn.bom { background: rgba(232,168,0,.15); color: var(--gold); }
-.vbtn.bom:hover { background: var(--gold); color: var(--navy); }
-.vbtn.jur { background: rgba(255,255,255,.06); color: rgba(255,255,255,.4); }
-.vbtn.jur:hover { background: rgba(255,255,255,.1); color: #fff; }
-.btn-logout { width: 100%; margin-top: 8px; padding: 5px; border-radius: 7px; background: rgba(214,48,49,.1); color: var(--red); border: 1px solid rgba(214,48,49,.2); font-size: 10px; cursor: pointer; font-family: var(--ff-b); font-weight: 700; }
-.btn-logout:hover { background: rgba(214,48,49,.2); }
+.sb-logout:hover{background:var(--red);color:#fff;}
 
-/* Admin main */
-.adm-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.adm-topbar { background: #111827; border-bottom: 1px solid rgba(255,255,255,.06); padding: 0 18px; height: 46px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-.adm-topbar-title { font-family: var(--ff-h); font-size: 15px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: .04em; }
-.live-chip { display: flex; align-items: center; gap: 5px; background: rgba(214,48,49,.1); border: 1px solid rgba(214,48,49,.25); border-radius: 12px; padding: 4px 10px; font-family: var(--ff-m); font-size: 9px; font-weight: 700; color: var(--red); }
-.ldot-adm { width: 7px; height: 7px; border-radius: 50%; background: var(--red); animation: pulse 1.4s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
-.adm-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 11px; }
-.adm-panel { display: none; flex-direction: column; gap: 11px; }
-.adm-panel.on { display: flex; }
+/* ════════════════════ MAIN ════════════════════ */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--cream);}
 
-/* Admin blocks */
-.blk { background: #111827; border: 1px solid rgba(255,255,255,.07); border-radius: 9px; overflow: hidden; }
-.blk-hd { padding: 10px 15px; background: rgba(232,168,0,.07); border-bottom: 1px solid rgba(255,255,255,.05); display: flex; align-items: center; justify-content: space-between; }
-.blk-title { font-family: var(--ff-h); font-size: 14px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: .04em; }
-.blk-body { padding: 13px 15px; }
+/* Topbar — style bande navy du site public */
+#topbar{
+  background:var(--white);border-bottom:1px solid var(--line);
+  box-shadow:var(--sh);flex-shrink:0;
+  padding:0 24px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.tb-left{display:flex;align-items:center;gap:12px;}
+.tb-eyebrow{
+  font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--gold);
+  letter-spacing:.22em;text-transform:uppercase;
+  display:flex;align-items:center;gap:6px;
+}
+.tb-eyebrow::before{content:'';width:16px;height:2px;background:var(--gold);border-radius:1px;}
+.tb-pagetitle{font-family:var(--ff-h);font-size:20px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.live-pill{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 13px;border-radius:16px;
+  background:rgba(214,48,49,.08);border:1px solid rgba(214,48,49,.2);
+  font-family:var(--ff-m);font-size:9px;font-weight:700;color:var(--red);
+  letter-spacing:.1em;
+}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.btn-navy{
+  background:var(--navy);color:var(--gold);border:none;border-radius:22px;
+  padding:9px 22px;font-family:var(--ff-h);font-size:13px;font-weight:800;cursor:pointer;
+  letter-spacing:.06em;text-transform:uppercase;transition:all .2s;
+}
+.btn-navy:hover{background:var(--navy-l);transform:translateY(-1px);box-shadow:var(--sh);}
+.btn-outline{
+  background:transparent;color:var(--navy);border:1.5px solid var(--line);
+  border-radius:22px;padding:8px 18px;font-family:var(--ff-h);font-size:13px;
+  font-weight:700;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
+}
+.btn-outline:hover{border-color:var(--navy);background:var(--off);}
 
-/* Admin form fields */
-.fg-adm { display: flex; flex-direction: column; gap: 4px; }
-.flbl-adm { font-family: var(--ff-m); font-size: 9px; font-weight: 700; color: var(--gold); letter-spacing: .16em; text-transform: uppercase; }
-.fi-adm, .fs-adm { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); border-radius: 6px; padding: 7px 11px; color: #fff; font-family: var(--ff-b); font-size: 12px; outline: none; transition: border .2s; width: 100%; }
-.fi-adm:focus, .fs-adm:focus { border-color: var(--gold); }
-.fi-adm::placeholder { color: rgba(255,255,255,.2); }
-.fs-adm option { background: #111827; color: #fff; }
-.pi-adm { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.09); border-radius: 5px; padding: 6px; color: #fff; font-family: var(--ff-m); font-size: 15px; font-weight: 700; outline: none; width: 100%; text-align: center; }
-.pi-adm:focus { border-color: var(--gold); }
+/* Body area */
+#body{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px;}
 
-/* Grids */
-.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+/* Panels */
+.panel{display:none;flex-direction:column;gap:14px;}
+.panel.active{display:flex;}
 
-/* Admin buttons */
-.btn-adm { padding: 7px 15px; border-radius: 13px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; font-family: var(--ff-b); transition: all .14s; }
-.btn-adm-gold { background: rgba(232,168,0,.14); color: var(--gold); border: 1px solid rgba(232,168,0,.25); }
-.btn-adm-gold:hover { background: var(--gold); color: var(--navy); }
-.btn-adm-navy { background: rgba(27,42,107,.4); color: #6FA3E8; border: 1px solid rgba(27,42,107,.5); }
-.btn-adm-navy:hover { background: var(--navy); color: #fff; }
-.btn-adm-red { background: rgba(214,48,49,.1); color: var(--red); border: 1px solid rgba(214,48,49,.2); }
-.btn-adm-red:hover { background: var(--red); color: #fff; }
-.btn-adm-green { background: rgba(0,184,148,.14); color: var(--green); border: 1px solid rgba(0,184,148,.25); }
-.btn-adm-green:hover { background: var(--green); color: #fff; }
-.btn-adm-gray { background: rgba(255,255,255,.06); color: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.1); }
-.btn-adm-gray:hover { background: rgba(255,255,255,.12); color: #fff; }
-.btn-adm-lg { padding: 9px 20px; font-size: 13px; border-radius: 17px; }
+/* ════════════════════ CARDS ════════════════════
+   Identiques aux cartes du site public
+════════════════════════════════════════════════ */
+.card{
+  background:var(--white);border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;
+}
+.card-hd{
+  padding:12px 20px;background:var(--off);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title{
+  font-family:var(--ff-h);font-size:15px;font-weight:900;
+  color:var(--navy);text-transform:uppercase;letter-spacing:.06em;
+  display:flex;align-items:center;gap:8px;
+}
+.card-title::before{content:'';width:3px;height:16px;background:var(--gold);border-radius:2px;display:block;}
+.card-body{padding:18px 20px;}
 
-/* Score duo */
-.score-duo { display: grid; grid-template-columns: 1fr 36px 1fr; align-items: center; gap: 10px; }
-.score-team { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.score-team-nm { font-family: var(--ff-h); font-size: 12px; font-weight: 700; color: #fff; letter-spacing: .06em; text-transform: uppercase; text-align: center; }
-.score-val-adm { font-family: var(--ff-h); font-size: 52px; font-weight: 900; color: #fff; line-height: 1; }
-.score-btns { display: flex; gap: 5px; }
-.bsc { width: 36px; height: 36px; border-radius: 50%; border: none; font-size: 18px; font-weight: 700; cursor: pointer; transition: all .14s; display: flex; align-items: center; justify-content: center; font-family: var(--ff-m); }
-.bsc-p { background: rgba(0,184,148,.14); color: var(--green); border: 1.5px solid rgba(0,184,148,.28); }
-.bsc-p:hover { background: var(--green); color: #fff; }
-.bsc-m { background: rgba(214,48,49,.1); color: var(--red); border: 1.5px solid rgba(214,48,49,.2); }
-.bsc-m:hover { background: var(--red); color: #fff; }
-.score-sep-adm { font-family: var(--ff-h); font-size: 24px; color: rgba(255,255,255,.18); text-align: center; }
+/* ════════════════════ FORM ════════════════════ */
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fl{font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--navy);letter-spacing:.18em;text-transform:uppercase;opacity:.55;}
+.fi{background:var(--off);border:1.5px solid var(--line);border-radius:8px;padding:8px 13px;
+  font-family:var(--ff-b);font-size:13px;color:var(--navy);outline:none;transition:border-color .2s;width:100%;}
+.fi:focus{border-color:var(--gold);}
+.fi::placeholder{color:var(--muted);}
+.fsel{background:var(--off);border:1.5px solid var(--line);border-radius:8px;padding:8px 13px;
+  font-family:var(--ff-b);font-size:13px;color:var(--navy);outline:none;cursor:pointer;width:100%;}
+.fsel:focus{border-color:var(--gold);}
+.fnum{background:var(--off);border:1.5px solid var(--line);border-radius:8px;padding:7px;
+  font-family:var(--ff-m);font-size:16px;font-weight:700;color:var(--navy);outline:none;
+  width:100%;text-align:center;transition:border-color .2s;}
+.fnum:focus{border-color:var(--gold);}
+.fta{background:var(--off);border:1.5px solid var(--line);border-radius:8px;padding:9px 13px;
+  font-family:var(--ff-b);font-size:13px;color:var(--navy);outline:none;
+  resize:none;min-height:68px;width:100%;transition:border-color .2s;}
+.fta:focus{border-color:var(--gold);}
+.fta::placeholder{color:var(--muted);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 
-/* Quick pts */
-.qpts { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 3px; }
-.qbtn { padding: 5px 11px; border-radius: 11px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; font-family: var(--ff-m); transition: all .13s; }
-.qbtn-good { background: rgba(0,184,148,.14); color: var(--green); border: 1px solid rgba(0,184,148,.24); }
-.qbtn-good:hover { background: var(--green); color: #fff; }
-.qbtn-bad { background: rgba(214,48,49,.1); color: var(--red); border: 1px solid rgba(214,48,49,.2); }
-.qbtn-bad:hover { background: var(--red); color: #fff; }
-.qbtn-try { background: rgba(225,112,85,.12); color: var(--orange); border: 1px solid rgba(225,112,85,.22); }
-.qbtn-try:hover { background: var(--orange); color: #fff; }
+/* ════════════════════ BUTTONS ════════════════════ */
+.btn{
+  padding:8px 18px;border-radius:18px;border:none;cursor:pointer;
+  font-family:var(--ff-h);font-size:12px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;transition:all .15s;
+}
+.btn-lg{padding:10px 26px;font-size:14px;border-radius:22px;}
+.b-navy{background:var(--navy);color:var(--gold);}
+.b-navy:hover{background:var(--navy-l);}
+.b-gold{background:rgba(232,168,0,.12);color:var(--navy);border:1.5px solid rgba(232,168,0,.35);}
+.b-gold:hover{background:var(--gold);color:var(--navy);}
+.b-green{background:rgba(0,184,148,.09);color:var(--green);border:1.5px solid rgba(0,184,148,.25);}
+.b-green:hover{background:var(--green);color:#fff;}
+.b-red{background:rgba(214,48,49,.08);color:var(--red);border:1.5px solid rgba(214,48,49,.22);}
+.b-red:hover{background:var(--red);color:#fff;}
+.b-gray{background:var(--off);color:var(--muted);border:1.5px solid var(--line);}
+.b-gray:hover{background:var(--line);color:var(--navy);}
 
-/* Status bar */
-.sbar { display: flex; gap: 6px; flex-wrap: wrap; }
-.sbtn { padding: 6px 13px; border-radius: 13px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1.5px solid transparent; transition: all .14s; font-family: var(--ff-b); }
-.sbtn-live { background: rgba(214,48,49,.1); color: var(--red); border-color: rgba(214,48,49,.28); }
-.sbtn-live.on, .sbtn-live:hover { background: var(--red); color: #fff; border-color: var(--red); }
-.sbtn-pause { background: rgba(225,112,85,.1); color: var(--orange); border-color: rgba(225,112,85,.28); }
-.sbtn-pause.on, .sbtn-pause:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
-.sbtn-end { background: rgba(0,184,148,.1); color: var(--green); border-color: rgba(0,184,148,.2); }
-.sbtn-end:hover { background: var(--green); color: #fff; }
+/* ════════════════════ STATUS CHIP ════════════════════ */
+.chip{font-family:var(--ff-m);font-size:8px;font-weight:700;padding:2px 9px;border-radius:9px;letter-spacing:.06em;}
+.ch-live{background:rgba(214,48,49,.1);color:var(--red);border:1px solid rgba(214,48,49,.2);}
+.ch-ok  {background:rgba(0,184,148,.1);color:var(--green);border:1px solid rgba(0,184,148,.22);}
+.ch-gold{background:rgba(232,168,0,.1);color:var(--navy);border:1px solid rgba(232,168,0,.28);}
+.ch-blue{background:rgba(30,111,217,.1);color:var(--blue);border:1px solid rgba(30,111,217,.22);}
+.ch-gray{background:var(--off);color:var(--muted);border:1px solid var(--line);}
 
-/* Rubrique list */
-.rub-list { display: flex; flex-direction: column; gap: 5px; }
-.rub-item { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); border-radius: 7px; padding: 9px 12px; display: flex; align-items: center; gap: 8px; transition: border-color .2s; }
-.rub-item.active { border-color: var(--gold); background: rgba(232,168,0,.05); }
-.rub-item.done { border-color: rgba(0,184,148,.28); background: rgba(0,184,148,.04); }
-.rub-item.reserve { border-color: rgba(107,114,128,.4); background: rgba(107,114,128,.05); }
-.rub-num { width: 24px; height: 24px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; font-family: var(--ff-m); font-size: 10px; font-weight: 700; color: var(--gold); flex-shrink: 0; }
-.rub-num.reserve-badge { background: rgba(107,114,128,.3); color: rgba(255,255,255,.4); }
-.rub-name { font-family: var(--ff-h); font-size: 13px; font-weight: 700; color: #fff; flex: 1; letter-spacing: .04em; text-transform: uppercase; }
-.rub-meta { font-family: var(--ff-m); font-size: 9px; color: rgba(255,255,255,.3); }
-.rub-acts { display: flex; gap: 4px; align-items: center; }
-.reserve-tag { font-family: var(--ff-m); font-size: 9px; color: rgba(107,114,128,.8); border: 1px solid rgba(107,114,128,.3); padding: 2px 7px; border-radius: 8px; }
+/* ════════════════════ SCORE DUO ════════════════════ */
+.score-duo{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:4px 0;}
+.st{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.st-name{font-family:var(--ff-h);font-size:14px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;text-align:center;}
+.st-num{font-family:var(--ff-h);font-size:72px;font-weight:900;line-height:1;color:var(--navy);}
+.st-num.a{color:var(--blue);}
+.st-num.b{color:var(--navy);}
+.st-sep{font-family:var(--ff-h);font-size:40px;font-weight:300;color:var(--muted);}
+.qbtns{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;}
+.qb{padding:5px 12px;border-radius:12px;border:none;font-family:var(--ff-m);font-size:10px;font-weight:700;cursor:pointer;transition:all .13s;}
+.qb-ok {background:rgba(0,184,148,.1);color:var(--green);border:1px solid rgba(0,184,148,.25);}
+.qb-ok:hover{background:var(--green);color:#fff;}
+.qb-bad{background:rgba(214,48,49,.08);color:var(--red);border:1px solid rgba(214,48,49,.2);}
+.qb-bad:hover{background:var(--red);color:#fff;}
+.qb-try{background:rgba(225,112,85,.08);color:var(--orange);border:1px solid rgba(225,112,85,.2);}
+.qb-try:hover{background:var(--orange);color:#fff;}
+.nudge-btns{display:flex;gap:5px;}
+.nbtn{width:34px;height:34px;border-radius:50%;border:none;font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .13s;}
+.nb-p{background:rgba(0,184,148,.1);color:var(--green);border:1.5px solid rgba(0,184,148,.25);}
+.nb-p:hover{background:var(--green);color:#fff;}
+.nb-m{background:rgba(214,48,49,.08);color:var(--red);border:1.5px solid rgba(214,48,49,.2);}
+.nb-m:hover{background:var(--red);color:#fff;}
+.status-row{display:flex;gap:8px;padding-top:14px;border-top:1px solid var(--line);flex-wrap:wrap;}
+.stbtn{padding:7px 16px;border-radius:16px;font-family:var(--ff-h);font-size:11px;font-weight:800;cursor:pointer;border:1.5px solid transparent;transition:all .14s;text-transform:uppercase;letter-spacing:.04em;}
+.stbtn-live{background:rgba(214,48,49,.08);color:var(--red);border-color:rgba(214,48,49,.22);}
+.stbtn-live.on,.stbtn-live:hover{background:var(--red);color:#fff;border-color:var(--red);}
+.stbtn-pause{background:rgba(225,112,85,.08);color:var(--orange);border-color:rgba(225,112,85,.22);}
+.stbtn-pause.on,.stbtn-pause:hover{background:var(--orange);color:#fff;border-color:var(--orange);}
+.stbtn-end{background:rgba(0,184,148,.08);color:var(--green);border-color:rgba(0,184,148,.22);}
+.stbtn-end:hover{background:var(--green);color:#fff;}
 
-/* Player list */
-.player-list { display: flex; flex-direction: column; gap: 5px; }
-.player-row { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); border-radius: 7px; transition: border-color .2s; }
-.player-row.playing { border-color: var(--gold); background: rgba(232,168,0,.05); }
-.player-row.done { border-color: rgba(0,184,148,.25); background: rgba(0,184,148,.04); }
-.pord { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--ff-m); font-size: 9px; font-weight: 700; flex-shrink: 0; }
-.pord-w { background: rgba(255,255,255,.08); color: rgba(255,255,255,.4); }
-.pord-p { background: var(--gold); color: var(--navy); }
-.pord-d { background: rgba(0,184,148,.2); color: var(--green); }
-.pname { font-size: 12px; font-weight: 600; color: #fff; flex: 1; }
-.ptag { font-family: var(--ff-m); font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 8px; }
-.ptag-a { background: rgba(27,42,107,.5); color: #6FA3E8; }
-.ptag-b { background: rgba(232,168,0,.18); color: var(--gold); }
-.pscore { font-family: var(--ff-m); font-size: 11px; font-weight: 700; color: var(--gold); min-width: 36px; text-align: right; }
+/* ════════════════════ RUBRIQUE LIST ════════════════════ */
+.rub-list{display:flex;flex-direction:column;gap:6px;}
+.ri{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--off);border:1.5px solid var(--line);border-radius:8px;transition:all .2s;
+}
+.ri:hover{box-shadow:var(--sh);}
+.ri.active{border-color:var(--gold);background:rgba(232,168,0,.05);}
+.ri.done{border-color:rgba(0,184,148,.3);background:rgba(0,184,148,.03);}
+.ri.reserve{opacity:.65;}
+.ri-num{width:26px;height:26px;border-radius:50%;background:var(--navy);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-m);font-size:9px;font-weight:700;color:var(--gold);}
+.ri.done .ri-num{background:var(--green);color:#fff;}
+.ri-nm{font-family:var(--ff-h);font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;flex:1;}
+.ri-meta{font-family:var(--ff-m);font-size:9px;color:var(--muted);margin-top:1px;}
+.ri-acts{display:flex;gap:5px;align-items:center;}
 
-/* Bomb admin grid */
-.bomb-adm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.bac { background: #111827; border: 1px solid rgba(255,255,255,.06); border-radius: 8px; overflow: hidden; }
-.bac.curr { border-color: var(--gold); }
-.bac-hd { background: var(--navy); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
-.bac-hd.gold { background: var(--gold); }
-.bac-nm { font-family: var(--ff-h); font-size: 13px; font-weight: 800; color: #fff; letter-spacing: .05em; text-transform: uppercase; }
-.bac-nm.dk { color: var(--navy); }
-.bac-tot { font-family: var(--ff-m); font-size: 17px; font-weight: 700; color: var(--gold); }
-.bac-tot.dk { color: var(--navy); }
-.bac-body { padding: 9px 11px; display: flex; flex-direction: column; gap: 5px; }
-.baq-row { display: flex; align-items: center; gap: 6px; }
-.baq-n { font-family: var(--ff-m); font-size: 10px; color: rgba(255,255,255,.3); width: 22px; flex-shrink: 0; }
-.baq-res { flex: 1; font-size: 11px; color: rgba(255,255,255,.35); }
-.baq-res.set { color: #fff; font-weight: 600; }
-.baq-btns { display: flex; gap: 3px; }
-.baqb { padding: 2px 7px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; border: none; font-family: var(--ff-b); transition: all .12s; }
-.baqb-ok { background: rgba(0,184,148,.14); color: var(--green); border: 1px solid rgba(0,184,148,.28); }
-.baqb-ok:hover { background: var(--green); color: #fff; }
-.baqb-bad { background: rgba(214,48,49,.1); color: var(--red); border: 1px solid rgba(214,48,49,.2); }
-.baqb-bad:hover { background: var(--red); color: #fff; }
-.baqb-try { background: rgba(225,112,85,.12); color: var(--orange); border: 1px solid rgba(225,112,85,.2); }
-.baqb-try:hover { background: var(--orange); color: #fff; }
-.baqb-mis { background: rgba(255,255,255,.05); color: rgba(255,255,255,.3); border: 1px solid rgba(255,255,255,.08); }
-.baqb-mis:hover { background: rgba(255,255,255,.1); color: #fff; }
-.baqb-add { background: rgba(232,168,0,.15); color: var(--gold); border: 1px solid rgba(232,168,0,.28); }
-.baqb-add:hover { background: var(--gold); color: var(--navy); }
+/* ════════════════════ PLAYER LIST ════════════════════ */
+.pl-list{display:flex;flex-direction:column;gap:5px;}
+.pl-row{
+  display:flex;align-items:center;gap:9px;padding:9px 14px;
+  background:var(--off);border:1.5px solid var(--line);border-radius:8px;transition:all .15s;
+}
+.pl-row:hover{box-shadow:var(--sh);}
+.pl-row.curr{border-color:var(--gold);background:rgba(232,168,0,.05);}
+.pl-row.done{border-color:rgba(0,184,148,.25);background:rgba(0,184,148,.03);}
+.pl-ord{width:24px;height:24px;border-radius:50%;flex-shrink:0;font-family:var(--ff-m);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.pl-ord.w{background:var(--off);color:var(--muted);border:1.5px solid var(--line);}
+.pl-ord.p{background:var(--gold);color:var(--navy);}
+.pl-ord.d{background:var(--green);color:#fff;}
+.pl-nm{font-size:13px;font-weight:600;color:var(--navy);flex:1;}
+.pl-tg{font-family:var(--ff-m);font-size:8px;font-weight:700;padding:2px 8px;border-radius:8px;}
+.pl-tg.a{background:rgba(30,111,217,.1);color:var(--blue);}
+.pl-tg.b{background:rgba(232,168,0,.12);color:var(--navy);}
+.pl-sc{font-family:var(--ff-m);font-size:11px;font-weight:700;color:var(--navy);min-width:36px;text-align:right;}
+
+/* ════════════════════ BOMB GRID ════════════════════ */
+.bomb-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.bc{background:var(--off);border:1.5px solid var(--line);border-radius:10px;overflow:hidden;transition:all .15s;}
+.bc:hover{box-shadow:var(--sh);}
+.bc.curr{border-color:var(--gold);box-shadow:0 0 0 2px rgba(232,168,0,.15);}
+.bc-hd{padding:9px 14px;display:flex;align-items:center;justify-content:space-between;}
+.bc-hd.navy{background:var(--navy);}
+.bc-hd.gold{background:var(--gold);}
+.bc-nm{font-family:var(--ff-h);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;}
+.bc-nm.wh{color:#fff;}
+.bc-nm.dk{color:var(--navy);}
+.bc-pts{font-family:var(--ff-m);font-size:15px;font-weight:700;}
+.bc-pts.gold{color:var(--gold);}
+.bc-pts.dk{color:var(--navy);}
+.bc-body{padding:10px 12px;display:flex;flex-direction:column;gap:5px;}
+.bq-row{display:flex;align-items:center;gap:6px;}
+.bq-n{font-family:var(--ff-m);font-size:8px;color:var(--muted);width:22px;flex-shrink:0;}
+.bq-v{flex:1;font-size:11px;color:var(--muted);}
+.bq-v.set{color:var(--navy);font-weight:600;}
+.bq-acts{display:flex;gap:2px;}
+.bqb{padding:2px 6px;border-radius:5px;font-size:9px;font-weight:700;cursor:pointer;border:none;transition:all .12s;}
+.bqb-ok {background:rgba(0,184,148,.1);color:var(--green);border:1px solid rgba(0,184,148,.25);}
+.bqb-ok:hover{background:var(--green);color:#fff;}
+.bqb-bad{background:rgba(214,48,49,.08);color:var(--red);border:1px solid rgba(214,48,49,.2);}
+.bqb-bad:hover{background:var(--red);color:#fff;}
+.bqb-try{background:rgba(225,112,85,.08);color:var(--orange);border:1px solid rgba(225,112,85,.2);}
+.bqb-try:hover{background:var(--orange);color:#fff;}
+.bqb-mis{background:var(--off);color:var(--muted);border:1px solid var(--line);}
+.bqb-add{background:rgba(232,168,0,.1);color:var(--navy);border:1px solid rgba(232,168,0,.25);}
+.bqb-add:hover{background:var(--gold);color:var(--navy);}
 
 /* Timer */
-.timer-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid rgba(255,255,255,.05); margin-top: 4px; }
-.timer-big { font-family: var(--ff-m); font-size: 30px; font-weight: 700; color: #fff; min-width: 68px; }
-.timer-big.warn { color: var(--red); }
+.timer-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--line);margin-top:8px;}
+.timer-dsp{font-family:var(--ff-m);font-size:38px;font-weight:700;color:var(--navy);}
+.timer-dsp.warn{color:var(--red);}
 
-/* Notes */
-.note-card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); border-radius: 7px; padding: 10px 12px; margin-bottom: 6px; }
-.note-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
-.note-title { font-family: var(--ff-h); font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: .04em; text-transform: uppercase; }
-.note-time { font-family: var(--ff-m); font-size: 9px; color: rgba(255,255,255,.25); }
-.note-txt { font-size: 11px; color: rgba(255,255,255,.65); line-height: 1.5; }
-.ntextarea { width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 5px; padding: 8px; color: rgba(255,255,255,.8); font-family: var(--ff-b); font-size: 12px; resize: none; outline: none; min-height: 68px; }
-.ntextarea:focus { border-color: var(--gold); }
-.ntextarea::placeholder { color: rgba(255,255,255,.2); }
+/* Results */
+.res-teams{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.res-team{padding:20px;border-radius:10px;text-align:center;}
+.res-team.a{background:rgba(30,111,217,.06);border:1.5px solid rgba(30,111,217,.18);}
+.res-team.b{background:rgba(232,168,0,.06);border:1.5px solid rgba(232,168,0,.22);}
+.res-team-lbl{font-family:var(--ff-m);font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.res-team-pts{font-family:var(--ff-h);font-size:56px;font-weight:900;color:var(--navy);line-height:1;}
+.res-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.res-table thead{background:var(--navy);}
+.res-table th{padding:10px 16px;text-align:left;font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;}
+.res-table td{padding:9px 16px;border-bottom:1px solid var(--line);font-size:13px;color:var(--gray);}
+.res-table tr:hover td{background:rgba(232,168,0,.03);}
+.res-table tr:last-child td{border:none;}
+.td-nm{font-weight:700;color:var(--navy);}
+.td-pts{font-family:var(--ff-m);font-weight:700;color:var(--blue);}
+
+/* Note card */
+.note-card{background:var(--off);border:1px solid var(--line);border-radius:8px;padding:11px 14px;margin-bottom:7px;}
+.note-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.note-ttl{font-family:var(--ff-h);font-size:12px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;}
+.note-tm{font-family:var(--ff-m);font-size:9px;color:var(--muted);}
+.note-txt{font-size:12px;color:var(--gray);line-height:1.5;}
 
 /* Audit */
-.audit-box { background: #111827; border: 1px solid rgba(255,255,255,.06); border-radius: 8px; overflow: hidden; }
-.audit-hd { padding: 8px 14px; background: rgba(255,255,255,.02); border-bottom: 1px solid rgba(255,255,255,.05); font-family: var(--ff-m); font-size: 9px; font-weight: 700; color: var(--gold); letter-spacing: .16em; text-transform: uppercase; }
-.audit-list { max-height: 200px; overflow-y: auto; }
-.audit-row { display: flex; align-items: flex-start; gap: 7px; padding: 6px 14px; border-bottom: 1px solid rgba(255,255,255,.03); }
-.audit-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-.audit-txt { font-size: 11px; color: rgba(255,255,255,.6); flex: 1; }
-.audit-time { font-family: var(--ff-m); font-size: 9px; color: rgba(255,255,255,.22); white-space: nowrap; }
+.audit{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.audit-hd{background:var(--navy);padding:9px 16px;display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--ff-m);font-size:8px;font-weight:700;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;}
+.audit-body{max-height:200px;overflow-y:auto;}
+.audit-row{display:flex;align-items:flex-start;gap:8px;padding:6px 16px;border-bottom:1px solid var(--line);}
+.audit-row:last-child{border:none;}
+.adot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.atxt{font-size:11px;color:var(--gray);flex:1;line-height:1.4;}
+.atime{font-family:var(--ff-m);font-size:9px;color:var(--muted);white-space:nowrap;}
 
-/* Chips */
-.chip { padding: 2px 8px; border-radius: 8px; font-family: var(--ff-m); font-size: 9px; font-weight: 700; letter-spacing: .06em; }
-.chip-live { background: rgba(214,48,49,.14); color: var(--red); border: 1px solid rgba(214,48,49,.28); }
-.chip-ok { background: rgba(0,184,148,.1); color: var(--green); border: 1px solid rgba(0,184,148,.2); }
-.chip-gold { background: rgba(232,168,0,.14); color: var(--gold); border: 1px solid rgba(232,168,0,.28); }
-.chip-res { background: rgba(107,114,128,.12); color: rgba(255,255,255,.4); border: 1px solid rgba(107,114,128,.25); }
-
-/* Results table */
-.rtable { width: 100%; border-collapse: collapse; }
-.rtable th { padding: 9px 13px; text-align: left; font-family: var(--ff-m); font-size: 9px; font-weight: 700; color: var(--gold); letter-spacing: .12em; text-transform: uppercase; background: rgba(232,168,0,.07); border-bottom: 1px solid rgba(255,255,255,.05); }
-.rtable td { padding: 8px 13px; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 12px; color: rgba(255,255,255,.68); }
-.rtable tr:hover td { background: rgba(255,255,255,.02); }
-.td-nm { font-weight: 600; color: #fff; }
-.td-pt { font-family: var(--ff-m); font-weight: 700; color: var(--gold); }
-.td-tot { font-family: var(--ff-m); font-size: 14px; font-weight: 700; color: var(--gold); }
-
-/* Utility */
-.empty { color:rgba(255,255,255,.22);font-size:11px;text-align:center;padding:14px; }
-.fs-btn { background: rgba(232,168,0,.1); border: 1px solid rgba(232,168,0,.3); color: var(--gold); padding: 6px 14px; border-radius: 16px; font-family: var(--ff-m); font-size: 10px; cursor: pointer; transition: all .2s; }
-.fs-btn:hover { background: var(--gold); color: var(--navy); }
-
-/* Scrollbars */
-::-webkit-scrollbar{width:3px;height:3px;}
+/* Helpers */
+.empty{color:var(--muted);font-family:var(--ff-h);font-size:12px;text-transform:uppercase;letter-spacing:.08em;text-align:center;padding:18px;}
+.divider{border:none;border-top:1px solid var(--line);margin:6px 0;}
+::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px;}
+::-webkit-scrollbar-thumb{background:rgba(27,42,107,.14);border-radius:2px;}
 
-/* ══════════════════════════════════════════════
-   PAGE JURY
-══════════════════════════════════════════════ */
-#jury-screen {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 7000;
-  min-height: 100vh;
-  background: var(--navy);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-#jury-screen.active { display: flex; }
+/* TOAST + MODAL */
+#toasts{position:fixed;bottom:16px;right:16px;z-index:9998;display:flex;flex-direction:column;gap:6px;}
+.toast{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--green);
+  border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:8px;
+  font-size:13px;color:var(--navy);min-width:210px;box-shadow:var(--sh-md);animation:tsin .22s ease;}
+.toast.w{border-left-color:var(--orange);}
+.toast.e{border-left-color:var(--red);}
+@keyframes tsin{from{transform:translateX(22px);opacity:0}to{transform:none;opacity:1}}
+#modal-bg{display:none;position:fixed;inset:0;z-index:9997;background:rgba(27,42,107,.4);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+#modal-bg.open{display:flex;}
+.mbox{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--gold);
+  border-radius:12px;padding:28px;width:360px;box-shadow:var(--sh-md);animation:mpop .17s ease;}
+@keyframes mpop{from{transform:scale(.93);opacity:0}to{transform:none;opacity:1}}
+.mbox h3{font-family:var(--ff-h);font-size:20px;font-weight:900;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
+.mbox p{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+.mbtns{display:flex;gap:10px;justify-content:flex-end;}
+.mbtn-c{padding:8px 18px;border-radius:18px;background:var(--off);color:var(--muted);border:1.5px solid var(--line);font-size:12px;cursor:pointer;font-family:var(--ff-h);font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:all .15s;}
+.mbtn-c:hover{color:var(--navy);border-color:var(--navy);}
+.mbtn-ok{padding:8px 18px;border-radius:18px;background:var(--navy);color:var(--gold);border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--ff-h);letter-spacing:.06em;text-transform:uppercase;transition:all .15s;}
+.mbtn-ok:hover{background:var(--navy-l);}
 </style>
 </head>
 <body>
 
-<!-- ────────────────────────────────────────────
-     TOAST + MODAL
-──────────────────────────────────────────── -->
-<div class="toasts" id="toasts"></div>
-<div class="modal-bg" id="modal">
-  <div class="modal-box">
-    <h3 id="m-t"></h3><p id="m-b"></p>
-    <div class="modal-btns">
+<div id="toasts"></div>
+<div id="modal-bg">
+  <div class="mbox">
+    <h3 id="m-title"></h3><p id="m-body"></p>
+    <div class="mbtns">
       <button class="mbtn-c" onclick="closeModal()">Annuler</button>
       <button class="mbtn-ok" id="m-ok">Confirmer</button>
     </div>
   </div>
 </div>
 
-<!-- ────────────────────────────────────────────
-     FULLSCREEN SCOREBOARD
-──────────────────────────────────────────── -->
-<div class="fs-overlay" id="fs-overlay">
-  <button class="fs-close" onclick="document.getElementById('fs-overlay').classList.remove('active')">✕</button>
-  <div class="fs-wm">
-    <svg viewBox="0 0 300 300" fill="none"><circle cx="150" cy="150" r="140" stroke="#1B2A6B" stroke-width="4"/><circle cx="150" cy="150" r="115" stroke="#1B2A6B" stroke-width="2"/><text x="150" y="170" text-anchor="middle" font-family="serif" font-size="54" font-weight="900" fill="#1B2A6B">WBG</text><text x="150" y="210" text-anchor="middle" font-family="sans-serif" font-size="11" letter-spacing="6" fill="#1B2A6B">LIGUE DES GÉNIES</text><text x="150" y="52" text-anchor="middle" font-size="14" fill="#E8A800">★</text><text x="248" y="100" text-anchor="middle" font-size="10" fill="#E8A800">★</text><text x="248" y="210" text-anchor="middle" font-size="10" fill="#E8A800">★</text><text x="52" y="100" text-anchor="middle" font-size="10" fill="#E8A800">★</text><text x="52" y="210" text-anchor="middle" font-size="10" fill="#E8A800">★</text></svg>
-  </div>
-  <div class="fs-topbar">W O R K I N G &nbsp; B R A I N &nbsp; G R O U P</div>
-  <div class="fs-schools">
-    <div class="fs-school" id="fs-school-a">COLLÈGE SAINT-JOSEPH</div>
-    <div class="fs-school-sep"></div>
-    <div class="fs-school r" id="fs-school-b">INSTITUTION SAINT-FRANÇOIS</div>
-  </div>
-  <div class="fs-main">
-    <div class="fs-logo">
-      <div class="fs-logo-circle" id="fs-logo-a-txt">SJ</div>
-    </div>
-    <div class="fs-scores">
-      <div class="fs-sv" id="fs-sa">000</div>
-      <div class="fs-sv-sep"></div>
-      <div class="fs-sv" id="fs-sb">000</div>
-    </div>
-    <div class="fs-logo">
-      <div class="fs-logo-circle" id="fs-logo-b-txt">SFX</div>
-    </div>
-  </div>
-  <div class="fs-tabs" id="fs-tabs"></div>
-  <div class="fs-footer">L I G U E &nbsp; D E S &nbsp; G É N I E S &nbsp;–&nbsp; <span id="fs-year">2026</span></div>
-</div>
-
-<!-- ────────────────────────────────────────────
-     LOGIN OVERLAY
-──────────────────────────────────────────── -->
-<div class="login-overlay" id="admin-login">
-  <div class="login-card">
-    <div class="login-logo">WB</div>
-    <div class="login-title">Administration</div>
-    <div class="login-sub">LIGUE DES GÉNIES · 2026</div>
-    <div class="fg-adm" style="margin-bottom:10px">
-      <div class="flbl-adm">Identifiant</div>
-      <input class="fi-adm" id="login-user" type="text" placeholder="admin@wbg.ht">
-    </div>
-    <div class="fg-adm" style="margin-bottom:10px">
-      <div class="flbl-adm">Mot de passe</div>
-      <input class="fi-adm" id="login-pass" type="password" placeholder="••••••••">
-    </div>
-    <div class="fg-adm" style="margin-bottom:10px">
-      <div class="flbl-adm">Rôle</div>
-      <select class="fs-adm" id="login-role">
+<!-- ════ LOGIN ════ -->
+<div id="login">
+  <div class="lc">
+    <div class="lc-badge">WB</div>
+    <div class="lc-title">Administration</div>
+    <div class="lc-sub">Ligue des Génies · WBG</div>
+    <div class="lf"><label class="ll">Identifiant</label><input class="li" id="l-u" type="text" placeholder="admin@wbg.ht"></div>
+    <div class="lf"><label class="ll">Mot de passe</label><input class="li" id="l-p" type="password" placeholder="••••••••"></div>
+    <div class="lf"><label class="ll">Rôle</label>
+      <select class="li-sel" id="l-r">
         <option>Super Admin</option>
         <option selected>Admin Scoreboard</option>
         <option>Admin Contenu</option>
       </select>
     </div>
-    <button class="btn-login" onclick="doAdminLogin()">Se connecter</button>
-    <div style="text-align:center;margin-top:10px;font-size:10px;color:rgba(255,255,255,.2);font-family:var(--ff-m)">
-      Démo — <a style="color:var(--gold);cursor:pointer" onclick="doAdminLogin()">connexion rapide</a>
-    </div>
+    <button class="lbtn" onclick="doLogin()">Se connecter →</button>
+    <div class="ldemoe">Démo — <a onclick="doLogin()">connexion rapide</a></div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     ADMIN WRAP
-════════════════════════════════════════════ -->
-<div id="admin-wrap">
+<!-- ════ APP ════ -->
+<div id="app">
 
   <!-- ── SIDEBAR ── -->
-  <div class="adm-sb">
-    <div class="adm-logo">
-      <div class="adm-logo-badge">WB</div>
-      <div class="adm-logo-text">Working Brain <span>Group</span></div>
+  <div id="sidebar">
+    <div class="sb-top">
+      <div class="sb-badge">WB</div>
+      <div>
+        <div class="sb-sitename">Working Brain <em>Group</em></div>
+        <div class="sb-edition">Administration</div>
+      </div>
     </div>
-    <nav class="adm-nav">
-      <div class="adm-nav-sec">Série Collective</div>
-      <div class="adm-link on" onclick="showPanel('collectif',this)"><span class="ico">🎯</span> Scores & Notes</div>
-      <div class="adm-link" onclick="showPanel('rubriques',this)"><span class="ico">📚</span> Rubriques (10)</div>
-      <div class="adm-nav-sec">Série Individuelle</div>
-      <div class="adm-link" onclick="showPanel('joueurs',this)"><span class="ico">👥</span> Joueurs & Ordre</div>
-      <div class="adm-link" onclick="showPanel('bomb',this)"><span class="ico">💥</span> Bombardement Live</div>
-      <div class="adm-nav-sec">Résultats</div>
-      <div class="adm-link" onclick="showPanel('results',this)"><span class="ico">🏆</span> Résultats Finaux</div>
-      <div class="adm-nav-sec">Système</div>
-      <div class="adm-link" onclick="showPanel('config',this)"><span class="ico">⚙️</span> Configuration</div>
-      <div class="adm-link" onclick="showPanel('log',this)"><span class="ico">📋</span> Journal Audit</div>
+    <nav class="sb-nav">
+      <div class="sb-section">Série Collective</div>
+      <div class="sb-item active" onclick="showPanel('scores',this)"><span class="ico">🎯</span> Scores & Notes</div>
+      <div class="sb-item" onclick="showPanel('rubriques',this)"><span class="ico">📚</span> Rubriques <span class="sb-badge-ct" id="rub-ct">0/10</span></div>
+      <div class="sb-section">Série Individuelle</div>
+      <div class="sb-item" onclick="showPanel('joueurs',this)"><span class="ico">👥</span> Joueurs & Ordre</div>
+      <div class="sb-item" onclick="showPanel('bomb',this)"><span class="ico">💥</span> Bombardement</div>
+      <div class="sb-section">Résultats</div>
+      <div class="sb-item" onclick="showPanel('results',this)"><span class="ico">🏆</span> Résultats finaux</div>
+      <div class="sb-section">Système</div>
+      <div class="sb-item" onclick="showPanel('config',this)"><span class="ico">⚙️</span> Configuration</div>
+      <div class="sb-item" onclick="showPanel('log',this)"><span class="ico">📋</span> Journal d'audit</div>
     </nav>
-    <div class="adm-sb-foot">
-      <div class="adm-user">
-        <div class="adm-avatar" id="adm-av">MA</div>
-        <div>
-          <div class="adm-uname" id="adm-uname">Marc Admin</div>
-          <div class="adm-urole" id="adm-urole">Scoreboard Admin</div>
-        </div>
+    <div class="sb-bottom">
+      <div class="sb-user">
+        <div class="sb-avatar" id="sb-av">MA</div>
+        <div><div class="sb-uname" id="sb-nm">Marc Admin</div><div class="sb-urole" id="sb-rl">Scoreboard Admin</div></div>
       </div>
-      <div class="view-btns-pub">
-        <button class="vbtn col" onclick="document.getElementById('fs-overlay').classList.add('active')">📺 Scoreboard</button>
-        <button class="vbtn bom" onclick="toast('Vue publique Bombardement','ok')">💥 Bomb.</button>
-        <button class="vbtn jur" onclick="openJury()">⏳ Jury</button>
+      <div class="sb-quickbtns">
+        <button class="sqb gold-btn" onclick="goMonitoring()">📺 Monitoring</button>
+        <button class="sqb" onclick="goJury()">⏳ Jury</button>
       </div>
-      <button class="btn-logout" onclick="confirmAdm('Déconnexion',`Se déconnecter de l'administration ?`,()=>{ document.getElementById('admin-login').classList.remove('gone'); })">⏻ Déconnexion</button>
+      <button class="sb-logout" onclick="confirm_('Déconnexion','Se déconnecter du panneau admin ?',()=>document.getElementById('login').classList.remove('hidden'))">⏻ Déconnexion</button>
     </div>
   </div>
 
   <!-- ── MAIN ── -->
-  <div class="adm-main">
-    <div class="adm-topbar">
-      <div class="adm-topbar-title" id="adm-panel-title">Scores & Notes — Série Collective</div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div class="live-chip"><div class="ldot-adm"></div> EN DIRECT</div>
-        <button class="fs-btn" onclick="document.getElementById('fs-overlay').classList.add('active')">⛶ Plein écran</button>
+  <div id="main">
+    <div id="topbar">
+      <div class="tb-left">
+        <div>
+          <div class="tb-eyebrow">Administration</div>
+          <div class="tb-pagetitle" id="page-title">Scores & Notes — Série Collective</div>
+        </div>
+      </div>
+      <div class="tb-right">
+        <div class="live-pill"><div class="ldot"></div>EN DIRECT</div>
+        <button class="btn-navy" onclick="goMonitoring()">📺 Ouvrir Monitoring</button>
       </div>
     </div>
-    <div class="adm-body">
 
-      <!-- ══ PANEL : COLLECTIF ══ -->
-      <div class="adm-panel on" id="adm-panel-collectif">
-        <div class="blk">
-          <div class="blk-hd">
-            <div class="blk-title">Contrôle des scores collectifs</div>
-            <div style="display:flex;gap:6px;align-items:center">
-              <span class="chip chip-live">● LIVE</span>
-              <select class="fs-adm" style="padding:3px 8px;font-size:10px;width:auto" id="rub-live-sel" onchange="activateRubFromSel(this.value)">
-                <option value="">— Rubrique active —</option>
+    <div id="body">
+
+      <!-- ══ SCORES ══ -->
+      <div class="panel active" id="p-scores">
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-title">Contrôle des scores</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span class="chip ch-live">● LIVE</span>
+              <select class="fsel" style="padding:4px 10px;font-size:11px;width:auto" id="rub-live-sel" onchange="activateRubById(+this.value)">
+                <option value="0">— Rubrique active —</option>
               </select>
             </div>
           </div>
-          <div class="blk-body">
+          <div class="card-body">
             <div class="score-duo">
-              <div class="score-team">
-                <div class="score-team-nm" id="adm-nm-a">ÉQUIPE A</div>
-                <div class="score-val-adm" id="adm-sa">0</div>
-                <div class="qpts">
-                  <button class="qbtn qbtn-good" onclick="addPts('a',G.pts.correct)">+10 ✅</button>
-                  <button class="qbtn qbtn-bad"  onclick="addPts('a',G.pts.wrong)">−5 ❌</button>
-                  <button class="qbtn qbtn-try"  onclick="addPts('a',G.pts.try)">+8 🔄</button>
+              <div class="st">
+                <div class="st-name" id="adm-na">ÉQUIPE A</div>
+                <div class="st-num a" id="adm-sa">0</div>
+                <div class="qbtns">
+                  <button class="qb qb-ok"  onclick="pts('a',G.p.c)">+10 ✅</button>
+                  <button class="qb qb-bad" onclick="pts('a',G.p.w)">−5 ❌</button>
+                  <button class="qb qb-try" onclick="pts('a',G.p.t)">+8 🔄</button>
                 </div>
-                <div class="score-btns" style="margin-top:4px">
-                  <button class="bsc bsc-p" onclick="addPts('a',1)">+</button>
-                  <button class="bsc bsc-m" onclick="addPts('a',-1)">−</button>
-                </div>
+                <div class="nudge-btns"><button class="nbtn nb-p" onclick="pts('a',1)">+</button><button class="nbtn nb-m" onclick="pts('a',-1)">−</button></div>
               </div>
-              <div class="score-sep-adm">–</div>
-              <div class="score-team">
-                <div class="score-team-nm" id="adm-nm-b">ÉQUIPE B</div>
-                <div class="score-val-adm" id="adm-sb">0</div>
-                <div class="qpts">
-                  <button class="qbtn qbtn-good" onclick="addPts('b',G.pts.correct)">+10 ✅</button>
-                  <button class="qbtn qbtn-bad"  onclick="addPts('b',G.pts.wrong)">−5 ❌</button>
-                  <button class="qbtn qbtn-try"  onclick="addPts('b',G.pts.try)">+8 🔄</button>
+              <div class="st-sep">–</div>
+              <div class="st">
+                <div class="st-name" id="adm-nb">ÉQUIPE B</div>
+                <div class="st-num b" id="adm-sb">0</div>
+                <div class="qbtns">
+                  <button class="qb qb-ok"  onclick="pts('b',G.p.c)">+10 ✅</button>
+                  <button class="qb qb-bad" onclick="pts('b',G.p.w)">−5 ❌</button>
+                  <button class="qb qb-try" onclick="pts('b',G.p.t)">+8 🔄</button>
                 </div>
-                <div class="score-btns" style="margin-top:4px">
-                  <button class="bsc bsc-p" onclick="addPts('b',1)">+</button>
-                  <button class="bsc bsc-m" onclick="addPts('b',-1)">−</button>
-                </div>
+                <div class="nudge-btns"><button class="nbtn nb-p" onclick="pts('b',1)">+</button><button class="nbtn nb-m" onclick="pts('b',-1)">−</button></div>
               </div>
             </div>
-            <div class="sbar" style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)">
-              <button class="sbtn sbtn-live on" onclick="setStatus('live',this)">🔴 EN DIRECT</button>
-              <button class="sbtn sbtn-pause" onclick="setStatus('pause',this)">⏸ PAUSE</button>
-              <button class="sbtn sbtn-end" onclick="confirmAdm('Fin série collective',`Score : ${G.sa}–${G.sb}. Terminer ?`,()=>{alog('Série collective terminée — '+G.sa+'–'+G.sb,'var(--gold)');toast('Série collective terminée','ok');})">✓ FIN COLLECTIF</button>
+            <div class="status-row">
+              <button class="stbtn stbtn-live on" onclick="setStatus('live',this)">🔴 En direct</button>
+              <button class="stbtn stbtn-pause"   onclick="setStatus('pause',this)">⏸ Pause</button>
+              <button class="stbtn stbtn-end"     onclick="confirm_('Fin collectif',`Score ${G.sa}–${G.sb}. Terminer la série collective ?`,()=>{alog('Série collective terminée — '+G.sa+'–'+G.sb,'var(--green)');toast('Série collective terminée ✓');})">✓ Fin collectif</button>
             </div>
           </div>
         </div>
-        <div class="blk">
-          <div class="blk-hd"><div class="blk-title">Ajouter une note</div></div>
-          <div class="blk-body">
-            <div class="g2" style="margin-bottom:8px">
-              <div class="fg-adm"><div class="flbl-adm">Rubrique</div><select class="fs-adm" id="note-rub-sel"><option value="">— Générale —</option></select></div>
-              <div class="fg-adm"><div class="flbl-adm">Équipe</div><select class="fs-adm" id="note-team-sel"><option value="">Les deux</option><option value="a">Équipe A</option><option value="b">Équipe B</option></select></div>
-            </div>
-            <textarea class="ntextarea" id="note-txt-in" placeholder="Observation, contestation, remarque jury..."></textarea>
-            <div style="display:flex;gap:6px;margin-top:7px">
-              <button class="btn-adm btn-adm-gold" onclick="addNote()">+ Enregistrer</button>
-              <button class="btn-adm btn-adm-gray" onclick="document.getElementById('note-txt-in').value=''">Effacer</button>
-            </div>
-          </div>
-        </div>
-        <div class="blk" id="notes-blk">
-          <div class="blk-hd"><div class="blk-title">Notes enregistrées</div></div>
-          <div class="blk-body" id="notes-body"><div class="empty">Aucune note</div></div>
-        </div>
-        <div class="audit-box"><div class="audit-hd">Journal des actions récentes</div><div class="audit-list" id="audit-short"></div></div>
-      </div>
-
-      <!-- ══ PANEL : RUBRIQUES ══ -->
-      <div class="adm-panel" id="adm-panel-rubriques">
-        <div class="blk">
-          <div class="blk-hd"><div class="blk-title">Définir les rubriques (max 10 · 1 de réserve)</div></div>
-          <div class="blk-body">
-            <div style="margin-bottom:12px">
-              <div class="flbl-adm" style="margin-bottom:6px">Barème par défaut (incréments)</div>
-              <div class="g4">
-                <div class="fg-adm"><div class="flbl-adm">✅ Bonne rép.</div><input class="pi-adm" type="number" id="pts-c" value="10" onchange="G.pts.correct=+this.value;syncQBtnLabels()"></div>
-                <div class="fg-adm"><div class="flbl-adm">❌ Mauvaise</div><input class="pi-adm" type="number" id="pts-w" value="-5" onchange="G.pts.wrong=+this.value;syncQBtnLabels()"></div>
-                <div class="fg-adm"><div class="flbl-adm">🔄 Bonne tent.</div><input class="pi-adm" type="number" id="pts-t" value="8" onchange="G.pts.try=+this.value;syncQBtnLabels()"></div>
-                <div class="fg-adm"><div class="flbl-adm">💨 Mauvaise t.</div><input class="pi-adm" type="number" id="pts-m" value="0" onchange="G.pts.miss=+this.value"></div>
-              </div>
-            </div>
-            <div class="g2" style="margin-bottom:8px">
-              <div class="fg-adm"><div class="flbl-adm">Nom de la rubrique</div><input class="fi-adm" id="rub-name-in" placeholder="Ex: Culture Générale, Sciences..."></div>
-              <div class="fg-adm"><div class="flbl-adm">Type</div>
-                <select class="fs-adm" id="rub-type-sel">
-                  <option value="normal">Rubrique normale</option>
-                  <option value="reserve">Rubrique de réserve</option>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Ajouter une note</div></div>
+          <div class="card-body">
+            <div class="g2" style="margin-bottom:10px">
+              <div class="fg"><label class="fl">Rubrique</label><select class="fsel" id="note-rub"></select></div>
+              <div class="fg"><label class="fl">Équipe</label>
+                <select class="fsel" id="note-team">
+                  <option value="">Les deux</option><option value="a">Équipe A</option><option value="b">Équipe B</option>
                 </select>
               </div>
             </div>
-            <div class="g2" style="margin-bottom:8px">
-              <div class="fg-adm"><div class="flbl-adm">Barème personnalisé ?</div>
-                <select class="fs-adm" id="rub-custom" onchange="document.getElementById('rub-custom-fields').style.display=this.value==='1'?'grid':'none'">
-                  <option value="0">Non — barème par défaut</option>
-                  <option value="1">Oui — personnaliser</option>
+            <textarea class="fta" id="note-txt" placeholder="Observation, contestation, incident..."></textarea>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button class="btn b-navy" onclick="addNote()">+ Enregistrer</button>
+              <button class="btn b-gray" onclick="document.getElementById('note-txt').value=''">Effacer</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Notes</div></div>
+          <div class="card-body" id="notes-body"><div class="empty">Aucune note</div></div>
+        </div>
+        <div class="audit"><div class="audit-hd">Journal récent<span id="short-log-ct" style="font-size:8px;color:rgba(255,255,255,.3)">0 actions</span></div><div class="audit-body" id="short-log"></div></div>
+      </div>
+
+      <!-- ══ RUBRIQUES ══ -->
+      <div class="panel" id="p-rubriques">
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Barème par défaut</div></div>
+          <div class="card-body">
+            <div class="g4">
+              <div class="fg"><label class="fl">✅ Bonne rép.</label><input class="fnum" type="number" id="pc" value="10" onchange="G.p.c=+this.value;syncQBtns()"></div>
+              <div class="fg"><label class="fl">❌ Mauvaise</label><input class="fnum" type="number" id="pw" value="-5" onchange="G.p.w=+this.value;syncQBtns()"></div>
+              <div class="fg"><label class="fl">🔄 Bonne tent.</label><input class="fnum" type="number" id="pt" value="8" onchange="G.p.t=+this.value;syncQBtns()"></div>
+              <div class="fg"><label class="fl">💨 Mauvaise t.</label><input class="fnum" type="number" id="pm" value="0" onchange="G.p.m=+this.value"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Nouvelle rubrique</div></div>
+          <div class="card-body">
+            <div class="g2" style="margin-bottom:10px">
+              <div class="fg"><label class="fl">Nom</label><input class="fi" id="rub-name" placeholder="Ex: Culture Générale…"></div>
+              <div class="fg"><label class="fl">Type</label>
+                <select class="fsel" id="rub-type">
+                  <option value="normal">Normale</option>
+                  <option value="reserve">Réserve</option>
                 </select>
               </div>
             </div>
-            <div id="rub-custom-fields" class="g4" style="display:none;margin-bottom:8px">
-              <div class="fg-adm"><div class="flbl-adm">✅</div><input class="pi-adm" type="number" id="rub-pc" value="10"></div>
-              <div class="fg-adm"><div class="flbl-adm">❌</div><input class="pi-adm" type="number" id="rub-pw" value="-5"></div>
-              <div class="fg-adm"><div class="flbl-adm">🔄</div><input class="pi-adm" type="number" id="rub-pt" value="8"></div>
-              <div class="fg-adm"><div class="flbl-adm">💨</div><input class="pi-adm" type="number" id="rub-pm" value="0"></div>
+            <div class="fg" style="margin-bottom:10px">
+              <label class="fl">Barème personnalisé</label>
+              <select class="fsel" id="rub-custom" onchange="document.getElementById('rub-cust-fields').style.display=this.value==='1'?'grid':'none'">
+                <option value="0">Non — barème par défaut</option>
+                <option value="1">Oui</option>
+              </select>
             </div>
-            <button class="btn-adm btn-adm-gold" onclick="addRub()">+ Ajouter rubrique</button>
+            <div id="rub-cust-fields" class="g4" style="display:none;margin-bottom:10px">
+              <div class="fg"><label class="fl">✅</label><input class="fnum" type="number" id="rcp" value="10"></div>
+              <div class="fg"><label class="fl">❌</label><input class="fnum" type="number" id="rwp" value="-5"></div>
+              <div class="fg"><label class="fl">🔄</label><input class="fnum" type="number" id="rtp" value="8"></div>
+              <div class="fg"><label class="fl">💨</label><input class="fnum" type="number" id="rmp" value="0"></div>
+            </div>
+            <button class="btn btn-lg b-navy" onclick="addRub()">+ Ajouter la rubrique</button>
           </div>
         </div>
-        <div class="blk">
-          <div class="blk-hd"><div class="blk-title">Rubriques de la session (<span id="rub-count">0</span>/10) — <span style="color:rgba(255,255,255,.3);font-size:11px">dont <span id="rub-res-count">0</span> de réserve</span></div></div>
-          <div class="blk-body"><div class="rub-list" id="rub-list"></div></div>
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-title">Rubriques <span style="font-weight:400;color:var(--muted);font-size:13px" id="rub-count-hd">(0/10)</span></div>
+          </div>
+          <div class="card-body"><div class="rub-list" id="rub-list"></div></div>
         </div>
       </div>
 
-      <!-- ══ PANEL : JOUEURS ══ -->
-      <div class="adm-panel" id="adm-panel-joueurs">
-        <div class="blk">
-          <div class="blk-hd"><div class="blk-title">Ajouter des joueurs</div></div>
-          <div class="blk-body">
-            <div class="g3" style="margin-bottom:8px;align-items:flex-end">
-              <div class="fg-adm"><div class="flbl-adm">Nom complet</div><input class="fi-adm" id="p-name-in" placeholder="Nom du joueur"></div>
-              <div class="fg-adm"><div class="flbl-adm">Équipe</div><select class="fs-adm" id="p-team-in"><option value="a">Équipe A</option><option value="b">Équipe B</option></select></div>
-              <button class="btn-adm btn-adm-gold btn-adm-lg" onclick="addPlayer()" style="margin-top:14px">+ Ajouter</button>
+      <!-- ══ JOUEURS ══ -->
+      <div class="panel" id="p-joueurs">
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Ajouter un joueur</div></div>
+          <div class="card-body">
+            <div class="g3" style="align-items:flex-end">
+              <div class="fg"><label class="fl">Nom complet</label><input class="fi" id="pname" placeholder="Nom du joueur"></div>
+              <div class="fg"><label class="fl">Équipe</label><select class="fsel" id="pteam"><option value="a">Équipe A</option><option value="b">Équipe B</option></select></div>
+              <button class="btn btn-lg b-navy" onclick="addPlayer()">+ Ajouter</button>
             </div>
           </div>
         </div>
-        <div class="blk">
-          <div class="blk-hd">
-            <div class="blk-title">Ordre de passage</div>
-            <button class="btn-adm btn-adm-navy" onclick="autoOrder()">🔀 Auto A/B alternance</button>
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-title">Ordre de passage</div>
+            <button class="btn b-gold" onclick="autoOrder()">🔀 Alternance A/B</button>
           </div>
-          <div class="blk-body">
-            <div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Le joueur N°1 commence, puis N°2, etc.</div>
-            <div class="player-list" id="player-list"></div>
-          </div>
+          <div class="card-body"><div class="pl-list" id="player-list"></div></div>
         </div>
-        <div class="blk">
-          <div class="blk-hd"><div class="blk-title">Paramètres du bombardement</div></div>
-          <div class="blk-body">
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Paramètres bombardement</div></div>
+          <div class="card-body">
             <div class="g2">
-              <div class="fg-adm"><div class="flbl-adm">Durée par joueur (secondes)</div><input class="pi-adm" type="number" id="bomb-dur-in" value="60" min="10" max="300" style="font-size:18px" onchange="G.bomb.duration=+this.value"></div>
-              <div class="fg-adm">
-                <div class="flbl-adm">Incrément notes (+)</div>
-                <select class="fs-adm" id="bomb-inc-sel" onchange="G.bomb.noteInc=+this.value">
-                  <option value="10" selected>+10 par question</option>
-                  <option value="20">+20 par question</option>
-                  <option value="50">+50 par question</option>
+              <div class="fg"><label class="fl">Durée par joueur (sec)</label><input class="fnum" type="number" id="bomb-dur" value="60" min="10" max="300" onchange="G.bd=+this.value"></div>
+              <div class="fg"><label class="fl">Incrément note</label>
+                <select class="fsel" id="bomb-inc" onchange="G.bi=+this.value">
+                  <option value="10" selected>+10 / question</option>
+                  <option value="20">+20 / question</option>
                 </select>
               </div>
             </div>
-            <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,.3)">ℹ️ Le nombre de questions est illimité — ajoutez autant de lignes Q que nécessaire pendant le bombardement.</div>
           </div>
         </div>
       </div>
 
-      <!-- ══ PANEL : BOMBARDEMENT LIVE ══ -->
-      <div class="adm-panel" id="adm-panel-bomb">
-        <div class="blk">
-          <div class="blk-hd">
-            <div class="blk-title">Joueur en cours · <span class="chip chip-live" id="bomb-curr-chip">Aucun</span></div>
-            <button class="btn-adm btn-adm-gold" onclick="toast('Vue publique Bombardement','ok')">👁 Écran public</button>
+      <!-- ══ BOMBARDEMENT ══ -->
+      <div class="panel" id="p-bomb">
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-title">Joueur actuel &nbsp;<span class="chip ch-gold" id="bomb-chip">—</span></div>
+            <button class="btn b-navy" onclick="goMonitoring()">📺 Monitoring</button>
           </div>
-          <div class="blk-body">
+          <div class="card-body">
             <div class="timer-row">
-              <div class="timer-big" id="bomb-adm-clk">1:00</div>
-              <button class="btn-adm btn-adm-green btn-adm-lg" onclick="startTimer()">▶ Démarrer</button>
-              <button class="btn-adm btn-adm-red" onclick="stopTimer()">⏸ Pause</button>
-              <button class="btn-adm btn-adm-gray" onclick="resetTimer()">↺ Reset</button>
-              <button class="btn-adm btn-adm-gold btn-adm-lg" onclick="nextPlayer()" style="margin-left:auto">⏭ Joueur suivant</button>
+              <div class="timer-dsp" id="bomb-timer">1:00</div>
+              <button class="btn btn-lg b-green" onclick="startTimer()">▶ Démarrer</button>
+              <button class="btn b-red" onclick="stopTimer()">⏸ Pause</button>
+              <button class="btn b-gray" onclick="resetTimer()">↺ Reset</button>
+              <button class="btn btn-lg b-navy" style="margin-left:auto" onclick="nextPlayer()">⏭ Suivant</button>
             </div>
-            <div id="bomb-queue-preview" style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"></div>
+            <div id="bomb-queue" style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px"></div>
           </div>
         </div>
-        <div class="bomb-adm-grid" id="bomb-adm-grid"></div>
+        <div class="bomb-grid" id="bomb-grid"></div>
       </div>
 
-      <!-- ══ PANEL : RÉSULTATS ══ -->
-      <div class="adm-panel" id="adm-panel-results">
-        <div class="blk">
-          <div class="blk-hd">
-            <div class="blk-title">Résultats finaux</div>
-            <button class="btn-adm btn-adm-gold btn-adm-lg" onclick="openJury()">📺 Écran jury</button>
+      <!-- ══ RESULTS ══ -->
+      <div class="panel" id="p-results">
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-title">Résultats finaux</div>
+            <button class="btn b-navy" onclick="goJury()">📋 Écran jury</button>
           </div>
-          <div class="blk-body">
-            <div class="g2" style="margin-bottom:14px">
-              <div style="text-align:center;padding:16px;background:rgba(27,42,107,.25);border-radius:9px;border:1px solid rgba(27,42,107,.4)">
-                <div style="font-family:var(--ff-h);font-size:12px;font-weight:700;color:#6FA3E8;letter-spacing:.1em;margin-bottom:5px;text-transform:uppercase" id="res-na">ÉQUIPE A</div>
-                <div style="font-family:var(--ff-h);font-size:46px;font-weight:900;color:#fff" id="res-ta">0</div>
-                <div style="font-family:var(--ff-m);font-size:9px;color:rgba(255,255,255,.3);margin-top:4px">Collectif + Individuel</div>
-              </div>
-              <div style="text-align:center;padding:16px;background:rgba(232,168,0,.08);border-radius:9px;border:1px solid rgba(232,168,0,.2)">
-                <div style="font-family:var(--ff-h);font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.1em;margin-bottom:5px;text-transform:uppercase" id="res-nb">ÉQUIPE B</div>
-                <div style="font-family:var(--ff-h);font-size:46px;font-weight:900;color:#fff" id="res-tb">0</div>
-                <div style="font-family:var(--ff-m);font-size:9px;color:rgba(255,255,255,.3);margin-top:4px">Collectif + Individuel</div>
-              </div>
+          <div class="card-body">
+            <div class="res-teams">
+              <div class="res-team a"><div class="res-team-lbl" id="res-na">ÉQUIPE A</div><div class="res-team-pts" id="res-ta">0</div></div>
+              <div class="res-team b"><div class="res-team-lbl" id="res-nb">ÉQUIPE B</div><div class="res-team-pts" id="res-tb">0</div></div>
             </div>
-            <div class="blk" style="margin:-2px">
-              <table class="rtable">
-                <thead><tr><th>Joueur</th><th>Équipe</th><th>Individuel</th><th>Collectif</th><th>Total</th></tr></thead>
-                <tbody id="res-tbody"></tbody>
-              </table>
-            </div>
+            <table class="res-table">
+              <thead><tr><th>Joueur</th><th>Équipe</th><th>Individuel</th><th>Collectif</th><th>Total</th></tr></thead>
+              <tbody id="res-body"></tbody>
+            </table>
           </div>
         </div>
       </div>
 
-      <!-- ══ PANEL : CONFIG ══ -->
-      <div class="adm-panel" id="adm-panel-config">
-        <div class="blk">
-          <div class="blk-hd"><div class="blk-title">Informations des équipes</div></div>
-          <div class="blk-body">
-            <div class="g2" style="margin-bottom:10px">
-              <div class="fg-adm"><div class="flbl-adm">Nom École / Équipe A</div><input class="fi-adm" id="cfg-sa" value="COLLÈGE SAINT-JOSEPH DU CAP HAÏTIEN" oninput="syncCfg()"></div>
-              <div class="fg-adm"><div class="flbl-adm">Nom École / Équipe B</div><input class="fi-adm" id="cfg-sb" value="INSTITUTION SAINT-FRANÇOIS XAVIER" oninput="syncCfg()"></div>
+      <!-- ══ CONFIG ══ -->
+      <div class="panel" id="p-config">
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Informations du match</div></div>
+          <div class="card-body">
+            <div class="g2" style="margin-bottom:12px">
+              <div class="fg"><label class="fl">Nom complet — Équipe A</label><input class="fi" id="cfg-sa" value="COLLÈGE SAINT-JOSEPH DU CAP HAÏTIEN" oninput="syncConfig()"></div>
+              <div class="fg"><label class="fl">Nom complet — Équipe B</label><input class="fi" id="cfg-sb" value="INSTITUTION SAINT-FRANÇOIS XAVIER" oninput="syncConfig()"></div>
             </div>
-            <div class="g2" style="margin-bottom:10px">
-              <div class="fg-adm"><div class="flbl-adm">Initiales Logo A</div><input class="fi-adm" id="cfg-la" value="SJ" maxlength="4" oninput="syncCfg()"></div>
-              <div class="fg-adm"><div class="flbl-adm">Initiales Logo B</div><input class="fi-adm" id="cfg-lb" value="SFX" maxlength="4" oninput="syncCfg()"></div>
-            </div>
-            <div class="g2">
-              <div class="fg-adm"><div class="flbl-adm">Année</div><input class="fi-adm" id="cfg-yr" value="2026" oninput="syncCfg()"></div>
-              <div class="fg-adm"><div class="flbl-adm">Phase du match</div><input class="fi-adm" id="cfg-ph" value="DEMI-FINALE" oninput="syncCfg()"></div>
+            <div class="g4">
+              <div class="fg"><label class="fl">Initiales A</label><input class="fi" id="cfg-la" value="SJ" maxlength="4" oninput="syncConfig()"></div>
+              <div class="fg"><label class="fl">Initiales B</label><input class="fi" id="cfg-lb" value="SFX" maxlength="4" oninput="syncConfig()"></div>
+              <div class="fg"><label class="fl">Année</label><input class="fi" id="cfg-yr" value="2026" oninput="syncConfig()"></div>
+              <div class="fg"><label class="fl">Phase</label><input class="fi" id="cfg-ph" value="DEMI-FINALE" oninput="syncConfig()"></div>
             </div>
           </div>
         </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn-adm btn-adm-gold btn-adm-lg" onclick="toast('Configuration sauvegardée','ok')">💾 Sauvegarder</button>
-          <button class="btn-adm btn-adm-red btn-adm-lg" onclick="confirmAdm('Réinitialiser tout','Remettre tous les scores à zéro ?',resetAll)">↺ Tout réinitialiser</button>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-lg b-navy" onclick="toast('Configuration sauvegardée ✓')">💾 Sauvegarder</button>
+          <button class="btn btn-lg b-red" onclick="confirm_('Réinitialiser','Remettre tous les scores à zéro ?',resetAll)">↺ Tout réinitialiser</button>
         </div>
       </div>
 
-      <!-- ══ PANEL : LOG ══ -->
-      <div class="adm-panel" id="adm-panel-log">
-        <div class="audit-box" style="flex:1">
-          <div class="audit-hd">Journal complet — non modifiable</div>
-          <div class="audit-list" id="audit-full" style="max-height:calc(100vh - 180px)"></div>
+      <!-- ══ LOG ══ -->
+      <div class="panel" id="p-log">
+        <div class="audit">
+          <div class="audit-hd">Journal d'audit complet — lecture seule<span id="full-log-ct" style="font-size:8px;color:rgba(255,255,255,.3)">0 actions</span></div>
+          <div class="audit-body" style="max-height:calc(100vh - 200px)" id="full-log"></div>
         </div>
       </div>
 
-    </div><!-- /adm-body -->
-  </div><!-- /adm-main -->
-</div><!-- /admin-wrap -->
-
-<!-- ════════════════════════════════════════════
-     ÉCRAN JURY
-════════════════════════════════════════════ -->
-<div id="jury-screen">
-  <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.015) 0,rgba(255,255,255,.015) 1px,transparent 1px,transparent 40px)"></div>
-  <button onclick="closeJury()" style="position:absolute;top:20px;left:20px;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.5);padding:8px 16px;border-radius:16px;font-family:var(--ff-m);font-size:10px;cursor:pointer">← Admin</button>
-  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0">
-    <div style="width:72px;height:72px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--ff-h);font-size:24px;font-weight:900;color:var(--navy);margin-bottom:16px">WB</div>
-    <div style="font-family:var(--ff-h);font-size:clamp(28px,5vw,56px);font-weight:900;color:#fff;letter-spacing:.14em;text-transform:uppercase;text-align:center;margin-bottom:4px">Délibération</div>
-    <div style="font-family:var(--ff-h);font-size:clamp(11px,1.8vw,18px);font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.24em;text-transform:uppercase;margin-bottom:28px">Le jury examine les résultats</div>
-    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(232,168,0,.2);border-radius:14px;overflow:hidden;width:min(680px,92vw)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;background:rgba(232,168,0,.1);border-bottom:1px solid rgba(232,168,0,.15)">
-        <div style="padding:10px 18px;font-family:var(--ff-h);font-size:clamp(12px,1.4vw,15px);font-weight:700;color:var(--gold);letter-spacing:.12em;text-transform:uppercase" id="jury-th-a">🔵 ÉQUIPE A</div>
-        <div style="padding:10px 18px;font-family:var(--ff-h);font-size:clamp(12px,1.4vw,15px);font-weight:700;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;border-left:1px solid rgba(232,168,0,.12)" id="jury-th-b">🟡 ÉQUIPE B</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,.06)">
-        <div style="padding:10px 18px;display:flex;align-items:center;justify-content:space-between"><span style="color:rgba(255,255,255,.75);font-size:13px">Score collectif</span><span style="font-family:var(--ff-m);font-weight:700;color:var(--gold)" id="jury-coll-a">0</span></div>
-        <div style="padding:10px 18px;display:flex;align-items:center;justify-content:space-between;border-left:1px solid rgba(255,255,255,.05)"><span style="color:rgba(255,255,255,.75);font-size:13px">Score collectif</span><span style="font-family:var(--ff-m);font-weight:700;color:var(--gold)" id="jury-coll-b">0</span></div>
-      </div>
-      <div id="jury-indiv-rows"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;background:rgba(232,168,0,.08);border-top:2px solid rgba(232,168,0,.3)">
-        <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between"><span style="font-family:var(--ff-h);font-size:14px;font-weight:700;color:#fff;text-transform:uppercase" id="jury-tot-la">TOTAL A</span><span style="font-family:var(--ff-m);font-size:26px;font-weight:700;color:var(--gold)" id="jury-tot-a">0</span></div>
-        <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-left:1px solid rgba(232,168,0,.12)"><span style="font-family:var(--ff-h);font-size:14px;font-weight:700;color:#fff;text-transform:uppercase" id="jury-tot-lb">TOTAL B</span><span style="font-family:var(--ff-m);font-size:26px;font-weight:700;color:var(--gold)" id="jury-tot-b">0</span></div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;margin-top:22px;font-family:var(--ff-h);font-size:clamp(11px,1.4vw,14px);font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.2em;text-transform:uppercase">
-      <div style="width:9px;height:9px;border-radius:50%;background:var(--gold);animation:pulse 1.6s infinite"></div>
-      En attente de la décision du jury
-    </div>
-  </div>
-</div>
+    </div><!-- /body -->
+  </div><!-- /main -->
+</div><!-- /app -->
 
 <script>
-/* ══════════════════════════════════════════════
-   GLOBAL STATE
-══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
 const G = {
-  sa: 0, sb: 0,
-  schoolA: 'COLLÈGE SAINT-JOSEPH DU CAP HAÏTIEN',
-  schoolB: 'INSTITUTION SAINT-FRANÇOIS XAVIER',
-  logoA: 'SJ', logoB: 'SFX',
-  year: '2026', phase: 'DEMI-FINALE',
-  pts: { correct: 10, wrong: -5, try: 8, miss: 0 },
-  rubriques: [],
-  activeRub: null,
-  notes: [],
-  auditLog: [],
-  players: [],
-  queue: [],
-  currIdx: -1,
-  bomb: { duration: 60, timeLeft: 60, running: false, interval: null, noteInc: 10 }
+  sa:0, sb:0,
+  nameA:'ÉQUIPE A', nameB:'ÉQUIPE B',
+  schoolA:'COLLÈGE SAINT-JOSEPH DU CAP HAÏTIEN',
+  schoolB:'INSTITUTION SAINT-FRANÇOIS XAVIER',
+  laA:'SJ', laB:'SFX', year:'2026', phase:'DEMI-FINALE',
+  p:{c:10,w:-5,t:8,m:0},
+  rubriques:[], activeRub:null,
+  notes:[], logs:[],
+  players:[], queue:[], ci:-1,
+  bd:60, bi:10, bt:60, brun:false, bint:null
 };
 
-/* ══════════════════════════════════════════════
-   LOGIN
-══════════════════════════════════════════════ */
-function doAdminLogin() {
-  document.getElementById('admin-login').classList.add('gone');
-  syncCfg(); renderRubList(); renderPlayerList(); buildBombAdm(); buildResults();
-  toast('Connecté avec succès', 'ok');
-  alog('Connexion administrateur', 'var(--gold)');
+/* ── LOGIN ── */
+function doLogin(){
+  document.getElementById('login').classList.add('hidden');
+  syncConfig(); renderRubList(); renderPlayers(); buildBombGrid();
+  alog('Connexion administrateur','var(--blue)');
+  toast('Connecté · WBG Admin ✓');
 }
 
-/* ══════════════════════════════════════════════
-   PANEL NAV
-══════════════════════════════════════════════ */
-function showPanel(id, el) {
-  document.querySelectorAll('.adm-panel').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.adm-link').forEach(l => l.classList.remove('on'));
-  document.getElementById('adm-panel-' + id).classList.add('on');
-  if (el) el.classList.add('on');
-  const titles = {
-    collectif: 'Scores & Notes — Série Collective',
-    rubriques: 'Rubriques — Série Collective',
-    joueurs: 'Joueurs & Ordre de passage',
-    bomb: 'Bombardement Live — Série Individuelle',
-    results: 'Résultats Finaux',
-    config: 'Configuration',
-    log: 'Journal d\'audit'
-  };
-  document.getElementById('adm-panel-title').textContent = titles[id] || id;
-  if (id === 'results') buildResults();
+/* ── NAV ── */
+const TITLES={scores:'Scores & Notes — Série Collective',rubriques:'Rubriques — Gestion',joueurs:'Joueurs & Ordre de passage',bomb:'Bombardement Live',results:'Résultats Finaux',config:'Configuration du match',log:"Journal d'audit complet"};
+function showPanel(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(e=>e.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('page-title').textContent=TITLES[id]||id;
+  if(id==='results')buildResults();
 }
+function goMonitoring(){toast('Ouvrez wbg-monitoring.html sur l\'écran de projection','ok');}
+function goJury(){toast('Ouvrez wbg-jury.html sur l\'écran jury','ok');}
 
-/* ══════════════════════════════════════════════
-   SCORES
-══════════════════════════════════════════════ */
-function fmt(n) { return String(Math.max(0, n)).padStart(3, '0'); }
-
-function addPts(team, val) {
-  if (team === 'a') G.sa = Math.max(0, G.sa + val);
-  else G.sb = Math.max(0, G.sb + val);
-  updateAdmScores(); syncFullscreen();
-  const nm = team === 'a' ? G.schoolA.split(' ')[0] : G.schoolB.split(' ')[0];
-  const rn = G.activeRub ? G.activeRub.name : 'Général';
-  alog(`[${rn}] ${nm} ${val > 0 ? '+' : ''}${val} → ${team === 'a' ? G.sa : G.sb}`, val > 0 ? 'var(--green)' : val < 0 ? 'var(--red)' : 'var(--orange)');
-  toast(`${nm} : ${val > 0 ? '+' : ''}${val}`, val >= 0 ? 'ok' : 'w');
+/* ── SCORES ── */
+function pts(t,v){
+  if(t==='a') G.sa=Math.max(0,G.sa+v);
+  else G.sb=Math.max(0,G.sb+v);
+  renderScores();
+  const nm=t==='a'?G.nameA:G.nameB;
+  const rn=G.activeRub?G.activeRub.n:'Général';
+  alog(`[${rn}] ${nm} ${v>=0?'+':''}${v} → ${t==='a'?G.sa:G.sb}`, v>0?'var(--green)':v<0?'var(--red)':'var(--orange)');
+  toast(`${nm.split(' ')[0]} : ${v>=0?'+':''}${v}`);
 }
-
-function updateAdmScores() {
-  document.getElementById('adm-sa').textContent = G.sa;
-  document.getElementById('adm-sb').textContent = G.sb;
-  document.getElementById('adm-nm-a').textContent = G.schoolA.substring(0, 16);
-  document.getElementById('adm-nm-b').textContent = G.schoolB.substring(0, 16);
+function renderScores(){
+  document.getElementById('adm-sa').textContent=G.sa;
+  document.getElementById('adm-sb').textContent=G.sb;
+  document.getElementById('adm-na').textContent=G.nameA;
+  document.getElementById('adm-nb').textContent=G.nameB;
 }
-
-function syncFullscreen() {
-  ['fs-sa','fs-sb'].forEach((id,i) => {
-    const el = document.getElementById(id);
-    if(el){ el.textContent = fmt(i===0?G.sa:G.sb); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),400); }
-  });
+function syncQBtns(){
+  document.querySelectorAll('.qb-ok').forEach(b=>b.textContent=`+${G.p.c} ✅`);
+  document.querySelectorAll('.qb-bad').forEach(b=>b.textContent=`${G.p.w} ❌`);
+  document.querySelectorAll('.qb-try').forEach(b=>b.textContent=`+${G.p.t} 🔄`);
 }
-
-function setStatus(s, btn) {
-  document.querySelectorAll('.sbtn').forEach(b => b.classList.remove('on'));
+function setStatus(s,btn){
+  document.querySelectorAll('.stbtn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  alog(`Statut → ${s.toUpperCase()}`, s === 'live' ? 'var(--red)' : s === 'pause' ? 'var(--orange)' : 'var(--green)');
+  alog('Statut → '+s.toUpperCase(), s==='live'?'var(--red)':s==='pause'?'var(--orange)':'var(--green)');
 }
 
-function syncQBtnLabels() {
-  document.querySelectorAll('.qbtn-good').forEach(b => b.textContent = `+${G.pts.correct} ✅`);
-  document.querySelectorAll('.qbtn-bad').forEach(b => b.textContent = `${G.pts.wrong} ❌`);
-  document.querySelectorAll('.qbtn-try').forEach(b => b.textContent = `+${G.pts.try} 🔄`);
+/* ── CONFIG ── */
+function syncConfig(){
+  G.schoolA=document.getElementById('cfg-sa')?.value||G.schoolA;
+  G.schoolB=document.getElementById('cfg-sb')?.value||G.schoolB;
+  G.nameA=document.getElementById('cfg-la')?.value||G.laA;
+  G.nameB=document.getElementById('cfg-lb')?.value||G.laB;
+  G.year=document.getElementById('cfg-yr')?.value||G.year;
+  G.phase=document.getElementById('cfg-ph')?.value||G.phase;
+  renderScores();
 }
 
-/* ══════════════════════════════════════════════
-   CONFIG
-══════════════════════════════════════════════ */
-function syncCfg() {
-  G.schoolA = document.getElementById('cfg-sa')?.value || G.schoolA;
-  G.schoolB = document.getElementById('cfg-sb')?.value || G.schoolB;
-  G.logoA   = document.getElementById('cfg-la')?.value || G.logoA;
-  G.logoB   = document.getElementById('cfg-lb')?.value || G.logoB;
-  G.year    = document.getElementById('cfg-yr')?.value || G.year;
-  G.phase   = document.getElementById('cfg-ph')?.value || G.phase;
-  document.getElementById('fs-school-a').textContent = G.schoolA;
-  document.getElementById('fs-school-b').textContent = G.schoolB;
-  document.getElementById('fs-logo-a-txt').textContent = G.logoA;
-  document.getElementById('fs-logo-b-txt').textContent = G.logoB;
-  document.getElementById('fs-year').textContent = G.year;
-  updateAdmScores();
-}
-
-/* ══════════════════════════════════════════════
-   RUBRIQUES
-══════════════════════════════════════════════ */
-function addRub() {
-  if (G.rubriques.length >= 10) { toast('Maximum 10 rubriques', 'w'); return; }
-  const name = document.getElementById('rub-name-in').value.trim();
-  if (!name) { toast('Entrez un nom', 'w'); return; }
-  const isReserve = document.getElementById('rub-type-sel').value === 'reserve';
-  const custom = document.getElementById('rub-custom').value === '1';
-  const rub = {
-    id: Date.now(), name, active: false, done: false, reserve: isReserve,
-    pts: custom ? {
-      correct: +document.getElementById('rub-pc').value,
-      wrong:   +document.getElementById('rub-pw').value,
-      try:     +document.getElementById('rub-pt').value,
-      miss:    +document.getElementById('rub-pm').value,
-    } : { ...G.pts }
-  };
-  G.rubriques.push(rub);
-  document.getElementById('rub-name-in').value = '';
-  renderRubList(); updateRubSelects();
-  alog(`Rubrique${isReserve?' (réserve)':''} : "${name}"`, '#6FA3E8');
-  toast(`"${name}" ajoutée${isReserve?' (réserve)':''}`, 'ok');
-}
-
-function activateRub(id) {
-  G.rubriques.forEach(r => r.active = r.id === id);
-  G.activeRub = G.rubriques.find(r => r.id === id) || null;
-  if (G.activeRub) {
-    G.pts.correct = G.activeRub.pts.correct;
-    G.pts.wrong   = G.activeRub.pts.wrong;
-    G.pts.try     = G.activeRub.pts.try;
-    syncQBtnLabels();
-  }
-  renderRubList(); updateRubFsTabs(); updateRubSelects();
-  alog(`Rubrique activée : "${G.activeRub?.name}"`, 'var(--gold)');
-  toast(`"${G.activeRub?.name}" active`, 'ok');
-}
-function activateRubFromSel(id) { if (id) activateRub(+id); }
-function doneRub(id) {
-  const r = G.rubriques.find(r => r.id === id);
-  if (r) { r.done = true; r.active = false; }
-  if (G.activeRub?.id === id) G.activeRub = null;
-  renderRubList(); updateRubFsTabs(); updateRubSelects();
-  alog(`Rubrique terminée : "${r?.name}"`, 'var(--green)');
-  toast(`"${r?.name}" terminée`, 'ok');
-}
-function deleteRub(id) {
-  const r = G.rubriques.find(r => r.id === id);
-  confirmAdm('Supprimer rubrique', `Supprimer "${r?.name}" ?`, () => {
-    G.rubriques = G.rubriques.filter(r => r.id !== id);
-    renderRubList(); updateRubFsTabs(); updateRubSelects();
-    toast('Rubrique supprimée', 'w');
+/* ── RUBRIQUES ── */
+function addRub(){
+  if(G.rubriques.length>=10){toast('Maximum 10 rubriques','w');return;}
+  const n=document.getElementById('rub-name').value.trim();
+  if(!n){toast('Entrez un nom','w');return;}
+  const isRes=document.getElementById('rub-type').value==='reserve';
+  const cust=document.getElementById('rub-custom').value==='1';
+  G.rubriques.push({
+    id:Date.now(),n,done:false,active:false,reserve:isRes,
+    p:cust?{c:+document.getElementById('rcp').value,w:+document.getElementById('rwp').value,t:+document.getElementById('rtp').value,m:+document.getElementById('rmp').value}:{...G.p}
   });
+  document.getElementById('rub-name').value='';
+  renderRubList(); updateRubSelects();
+  alog(`Rubrique${isRes?' [réserve]':''} : "${n}" ajoutée`,'var(--blue)');
+  toast(`"${n}" ajoutée`);
 }
-function renderRubList() {
-  const normal = G.rubriques.filter(r => !r.reserve);
-  const reserve = G.rubriques.filter(r => r.reserve);
-  document.getElementById('rub-count').textContent = G.rubriques.length;
-  document.getElementById('rub-res-count').textContent = reserve.length;
-  const ul = document.getElementById('rub-list');
-  if (!G.rubriques.length) { ul.innerHTML = '<div class="empty">Aucune rubrique — ajoutez jusqu\'à 10</div>'; return; }
-  const renderItem = (r, i) => {
-    const cls = r.reserve ? 'reserve' : (r.active ? 'active' : (r.done ? 'done' : ''));
-    const numCls = r.reserve ? 'reserve-badge' : '';
-    return `<div class="rub-item ${cls}">
-      <div class="rub-num ${numCls}">${r.reserve ? '⊕' : i+1}</div>
-      <div style="flex:1">
-        <div class="rub-name" style="${r.reserve?'color:rgba(255,255,255,.45)':''}">${r.name}${r.reserve?' <span class="reserve-tag">RÉSERVE</span>':''}</div>
-        <div class="rub-meta">✅${r.pts.correct} ❌${r.pts.wrong} 🔄${r.pts.try} 💨${r.pts.miss}</div>
-      </div>
-      <div class="rub-acts">
-        ${r.done
-          ? '<span style="color:var(--green);font-family:var(--ff-m);font-size:9px">✓ TERMINÉE</span>'
-          : r.active
-          ? '<span style="color:var(--gold);font-family:var(--ff-m);font-size:9px">● ACTIVE</span><button class="btn-adm btn-adm-green" style="font-size:9px" onclick="doneRub('+r.id+')">Terminer</button>'
-          : '<button class="btn-adm btn-adm-gold" style="font-size:9px" onclick="activateRub('+r.id+')">▶ Activer</button>'
-        }
-        <button class="btn-adm btn-adm-red" style="font-size:9px;padding:3px 8px" onclick="deleteRub(${r.id})">✕</button>
+function activateRubById(id){
+  if(!id)return;
+  G.rubriques.forEach(r=>r.active=r.id===id);
+  G.activeRub=G.rubriques.find(r=>r.id===id)||null;
+  if(G.activeRub){G.p.c=G.activeRub.p.c;G.p.w=G.activeRub.p.w;G.p.t=G.activeRub.p.t;syncQBtns();}
+  renderRubList(); updateRubSelects();
+  alog(`Rubrique activée : "${G.activeRub?.n}"`,'var(--gold)');
+  toast(`"${G.activeRub?.n}" active`);
+}
+function doneRub(id){
+  const r=G.rubriques.find(r=>r.id===id);
+  if(r){r.done=true;r.active=false;if(G.activeRub?.id===id)G.activeRub=null;}
+  renderRubList(); updateRubSelects();
+  alog(`Rubrique terminée : "${r?.n}"`,'var(--green)');
+  toast(`"${r?.n}" terminée`);
+}
+function delRub(id){
+  confirm_('Supprimer',`Supprimer la rubrique ?`,()=>{G.rubriques=G.rubriques.filter(r=>r.id!==id);renderRubList();updateRubSelects();toast('Rubrique supprimée','w');});
+}
+function renderRubList(){
+  const n=G.rubriques.filter(r=>!r.reserve);
+  const r=G.rubriques.filter(r=>r.reserve);
+  document.getElementById('rub-ct').textContent=G.rubriques.length+'/10';
+  document.getElementById('rub-count-hd').textContent=`(${G.rubriques.length}/10)`;
+  const ul=document.getElementById('rub-list');
+  if(!G.rubriques.length){ul.innerHTML='<div class="empty">Aucune rubrique — ajoutez jusqu\'à 10</div>';return;}
+  const mk=(rb,i)=>{
+    const cls=rb.reserve?'reserve':rb.active?'active':rb.done?'done':'';
+    const stCls=rb.active?'ch-gold':rb.done?'ch-ok':rb.reserve?'ch-gray':'ch-gray';
+    const stTxt=rb.active?'● Active':rb.done?'✓ Terminée':rb.reserve?'Réserve':'En attente';
+    return `<div class="ri ${cls}">
+      <div class="ri-num">${rb.reserve?'⊕':i+1}</div>
+      <div style="flex:1"><div class="ri-nm">${rb.n}</div><div class="ri-meta">✅${rb.p.c} ❌${rb.p.w} 🔄${rb.p.t}</div></div>
+      <div class="ri-acts">
+        ${rb.done?'':(rb.active
+          ?`<button class="btn b-green" style="font-size:10px;padding:4px 10px" onclick="doneRub(${rb.id})">Terminer</button>`
+          :`<button class="btn b-gold" style="font-size:10px;padding:4px 10px" onclick="activateRubById(${rb.id})">▶ Activer</button>`)}
+        <span class="chip ${stCls}">${stTxt}</span>
+        <button class="btn b-red" style="font-size:10px;padding:4px 10px" onclick="delRub(${rb.id})">✕</button>
       </div>
     </div>`;
   };
-  let html = '';
-  normal.forEach((r, i) => { html += renderItem(r, i); });
-  if (reserve.length) {
-    html += `<div style="font-family:var(--ff-m);font-size:9px;color:rgba(107,114,128,.7);letter-spacing:.16em;text-transform:uppercase;padding:10px 0 4px">— Rubriques de réserve —</div>`;
-    reserve.forEach(r => { html += renderItem(r, 0); });
-  }
-  ul.innerHTML = html;
+  let html='';
+  n.forEach((rb,i)=>html+=mk(rb,i));
+  if(r.length){html+=`<div style="font-family:var(--ff-m);font-size:8px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;padding:12px 0 4px">— Réserves —</div>`;r.forEach(rb=>html+=mk(rb,0));}
+  ul.innerHTML=html;
 }
-function updateRubFsTabs() {
-  const c = document.getElementById('fs-tabs');
-  if (!c) return;
-  const normal = G.rubriques.filter(r => !r.reserve);
-  c.innerHTML = normal.map(r =>
-    `<div class="fs-tab-pill ${r.active?'act':r.done?'dn':''}">${r.name}</div>`
-  ).join('');
-}
-function updateRubSelects() {
-  const opts = G.rubriques.filter(r => !r.reserve).map(r => `<option value="${r.id}">${r.name}</option>`).join('');
-  const ls = document.getElementById('rub-live-sel');
-  if (ls) ls.innerHTML = '<option value="">— Sélectionner rubrique —</option>' + opts;
-  const ns = document.getElementById('note-rub-sel');
-  if (ns) ns.innerHTML = '<option value="">— Générale —</option>' + opts;
+function updateRubSelects(){
+  const opts=G.rubriques.filter(r=>!r.reserve).map(r=>`<option value="${r.id}">${r.n}</option>`).join('');
+  const a=document.getElementById('rub-live-sel'); if(a)a.innerHTML='<option value="0">— Sélectionner —</option>'+opts;
+  const b=document.getElementById('note-rub'); if(b)b.innerHTML='<option value="">Générale</option>'+opts;
 }
 
-/* ══════════════════════════════════════════════
-   NOTES
-══════════════════════════════════════════════ */
-function addNote() {
-  const text = document.getElementById('note-txt-in').value.trim();
-  if (!text) { toast('Entrez une note', 'w'); return; }
-  const rubId = document.getElementById('note-rub-sel').value;
-  const rubName = rubId ? G.rubriques.find(r => r.id == rubId)?.name || 'Générale' : 'Générale';
-  const team = document.getElementById('note-team-sel').value;
-  const now = new Date().toLocaleTimeString('fr');
-  G.notes.push({ rub: rubName, team, text, time: now });
-  document.getElementById('note-txt-in').value = '';
-  renderNotes();
-  alog(`Note : "${text.substring(0,44)}..."`, '#6FA3E8');
-  toast('Note enregistrée', 'ok');
+/* ── NOTES ── */
+function addNote(){
+  const txt=document.getElementById('note-txt').value.trim();
+  if(!txt){toast('Entrez une note','w');return;}
+  const rubId=document.getElementById('note-rub').value;
+  const rn=rubId?G.rubriques.find(r=>r.id==rubId)?.n||'Générale':'Générale';
+  const tm=document.getElementById('note-team').value;
+  const t=new Date().toLocaleTimeString('fr');
+  G.notes.push({rn,tm,txt,t});
+  document.getElementById('note-txt').value='';
+  renderNotes(); alog(`Note : "${txt.substring(0,38)}…"`,'var(--blue)'); toast('Note enregistrée');
 }
-function renderNotes() {
-  const b = document.getElementById('notes-body');
-  if (!G.notes.length) { b.innerHTML = '<div class="empty">Aucune note</div>'; return; }
-  b.innerHTML = G.notes.map((n,i) => `
+function renderNotes(){
+  const b=document.getElementById('notes-body');
+  if(!G.notes.length){b.innerHTML='<div class="empty">Aucune note</div>';return;}
+  b.innerHTML=G.notes.map((n,i)=>`
     <div class="note-card">
       <div class="note-hdr">
-        <div class="note-title">${n.rub}${n.team ? ' — '+(n.team==='a'?G.schoolA:G.schoolB).split(' ')[0] : ''}</div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <span class="note-time">${n.time}</span>
-          <button class="btn-adm btn-adm-red" style="font-size:9px;padding:2px 7px" onclick="G.notes.splice(${i},1);renderNotes()">✕</button>
+        <div class="note-ttl">${n.rn}${n.tm?' · '+(n.tm==='a'?G.nameA:G.nameB):''}</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="note-tm">${n.t}</span>
+          <button class="btn b-red" style="font-size:10px;padding:3px 8px" onclick="G.notes.splice(${i},1);renderNotes()">✕</button>
         </div>
       </div>
-      <div class="note-txt">${n.text}</div>
+      <div class="note-txt">${n.txt}</div>
     </div>`).join('');
 }
 
-/* ══════════════════════════════════════════════
-   JOUEURS
-══════════════════════════════════════════════ */
-function addPlayer() {
-  const name = document.getElementById('p-name-in').value.trim();
-  if (!name) { toast('Entrez un nom', 'w'); return; }
-  const team = document.getElementById('p-team-in').value;
-  G.players.push({ id: Date.now(), name, team, order: G.players.length, indivScore: 0, done: false, questions: [] });
-  document.getElementById('p-name-in').value = '';
-  renderPlayerList(); buildBombAdm();
-  alog(`Joueur : ${name} (Éq. ${team.toUpperCase()})`, '#6FA3E8');
-  toast(`${name} ajouté`, 'ok');
+/* ── JOUEURS ── */
+function addPlayer(){
+  const nm=document.getElementById('pname').value.trim();
+  if(!nm){toast('Entrez un nom','w');return;}
+  const tm=document.getElementById('pteam').value;
+  G.players.push({id:Date.now(),nm,tm,ord:G.players.length,sc:0,done:false,qs:[]});
+  document.getElementById('pname').value='';
+  renderPlayers(); buildBombGrid();
+  alog(`Joueur : ${nm} (Éq.${tm.toUpperCase()})`,'var(--blue)'); toast(`${nm} ajouté`);
 }
-function autoOrder() {
-  const a = G.players.filter(p => p.team === 'a');
-  const b = G.players.filter(p => p.team === 'b');
-  const mx = Math.max(a.length, b.length);
-  const ord = [];
-  for(let i=0;i<mx;i++){if(i<a.length)ord.push(a[i]);if(i<b.length)ord.push(b[i]);}
-  ord.forEach((p,i)=>p.order=i); G.players=ord;
-  renderPlayerList(); toast('Ordre A/B/A/B appliqué','ok');
+function autoOrder(){
+  const a=G.players.filter(p=>p.tm==='a'),b=G.players.filter(p=>p.tm==='b');
+  const o=[];for(let i=0;i<Math.max(a.length,b.length);i++){if(i<a.length)o.push(a[i]);if(i<b.length)o.push(b[i]);}
+  o.forEach((p,i)=>p.ord=i);G.players=o; renderPlayers(); toast('Ordre A/B/A/B appliqué');
 }
-function movePlayer(id, dir) {
-  const sorted = [...G.players].sort((a,b)=>a.order-b.order);
-  const idx = sorted.findIndex(p=>p.id===id);
-  const tgt = sorted[idx+dir];
-  if(!tgt)return;
-  const tmp=sorted[idx].order;sorted[idx].order=tgt.order;tgt.order=tmp;
-  renderPlayerList();
+function moveP(id,d){
+  const s=[...G.players].sort((a,b)=>a.ord-b.ord);
+  const i=s.findIndex(p=>p.id===id),nx=s[i+d]; if(!nx)return;
+  const tmp=s[i].ord;s[i].ord=nx.ord;nx.ord=tmp; renderPlayers();
 }
-function removePlayer(id) {
-  G.players = G.players.filter(p=>p.id!==id);
-  renderPlayerList(); buildBombAdm();
-}
-function renderPlayerList() {
-  const c = document.getElementById('player-list');
+function delP(id){G.players=G.players.filter(p=>p.id!==id);renderPlayers();buildBombGrid();}
+function renderPlayers(){
+  const c=document.getElementById('player-list');
   if(!G.players.length){c.innerHTML='<div class="empty">Aucun joueur</div>';return;}
-  const sorted=[...G.players].sort((a,b)=>a.order-b.order);
-  const curr=G.queue[G.currIdx];
-  c.innerHTML=sorted.map((p,i)=>{
-    const isCurr=curr&&curr.id===p.id;
-    return `<div class="player-row ${p.done?'done':isCurr?'playing':''}">
-      <div class="pord ${p.done?'pord-d':isCurr?'pord-p':'pord-w'}">${i+1}</div>
-      <div class="pname">${p.name}</div>
-      <span class="ptag ${p.team==='a'?'ptag-a':'ptag-b'}">Éq.${p.team.toUpperCase()}</span>
-      <span class="pscore">${p.indivScore>0?'+':''}${p.indivScore}</span>
+  const s=[...G.players].sort((a,b)=>a.ord-b.ord);
+  const curr=G.queue[G.ci];
+  c.innerHTML=s.map((p,i)=>`
+    <div class="pl-row ${p.done?'done':curr&&curr.id===p.id?'curr':''}">
+      <div class="pl-ord ${p.done?'d':curr&&curr.id===p.id?'p':'w'}">${i+1}</div>
+      <div class="pl-nm">${p.nm}</div>
+      <span class="pl-tg ${p.tm}">${p.tm.toUpperCase()}</span>
+      <span class="pl-sc">${p.sc>=0?'+':''}${p.sc}</span>
       <div style="display:flex;gap:3px">
-        ${i>0?`<button class="btn-adm btn-adm-gray" style="font-size:9px;padding:2px 7px" onclick="movePlayer(${p.id},-1)">↑</button>`:''}
-        ${i<sorted.length-1?`<button class="btn-adm btn-adm-gray" style="font-size:9px;padding:2px 7px" onclick="movePlayer(${p.id},1)">↓</button>`:''}
-        <button class="btn-adm btn-adm-red" style="font-size:9px;padding:2px 7px" onclick="removePlayer(${p.id})">✕</button>
+        ${i>0?`<button class="btn b-gray" style="font-size:10px;padding:3px 8px" onclick="moveP(${p.id},-1)">↑</button>`:''}
+        ${i<s.length-1?`<button class="btn b-gray" style="font-size:10px;padding:3px 8px" onclick="moveP(${p.id},1)">↓</button>`:''}
+        <button class="btn b-red" style="font-size:10px;padding:3px 8px" onclick="delP(${p.id})">✕</button>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
-/* ══════════════════════════════════════════════
-   BOMBARDEMENT
-══════════════════════════════════════════════ */
-function initQueue() {
-  G.queue = [...G.players].sort((a,b)=>a.order-b.order);
-  G.bomb.duration = +(document.getElementById('bomb-dur-in')?.value || 60);
-}
-function nextPlayer() {
-  if(!G.queue.length) initQueue();
+/* ── BOMBARDEMENT ── */
+function initQ(){G.queue=[...G.players].sort((a,b)=>a.ord-b.ord);G.bd=+(document.getElementById('bomb-dur')?.value||60);}
+function nextPlayer(){
+  if(!G.queue.length)initQ();
   stopTimer();
-  const prev=G.queue[G.currIdx];
-  if(prev) prev.done=true;
-  G.currIdx++;
-  if(G.currIdx>=G.queue.length){
-    toast('Tous les joueurs ont joué !','ok');
-    confirmAdm('Série individuelle terminée','Passer à l\'écran jury ?',()=>{openJury();});
-    return;
-  }
-  const p=G.queue[G.currIdx];
-  G.bomb.timeLeft=G.bomb.duration;
-  updateClock();
-  document.getElementById('bomb-curr-chip').textContent=p.name;
-  buildBombAdm(); renderPlayerList(); buildQueuePreview();
-  alog(`Bombardement : ${p.name} (Éq. ${p.team.toUpperCase()})`, 'var(--gold)');
-  toast(`Tour de ${p.name}`, 'ok');
-  setTimeout(()=>startTimer(), 600);
+  const prev=G.queue[G.ci]; if(prev)prev.done=true;
+  G.ci++;
+  if(G.ci>=G.queue.length){toast('Tous les joueurs ont joué !');confirm_('Série terminée','Passer au jury ?',goJury);return;}
+  const p=G.queue[G.ci];
+  G.bt=G.bd; updateTimerDisplay();
+  document.getElementById('bomb-chip').textContent=p.nm;
+  buildBombGrid(); renderPlayers(); buildQueue();
+  alog(`Bombardement : ${p.nm} (Éq.${p.tm.toUpperCase()})`,'var(--gold)');
+  toast(`Tour de ${p.nm}`);
+  setTimeout(startTimer,500);
 }
-function addBombQ(playerId) {
-  const p=G.players.find(p=>p.id===playerId);
-  if(!p)return;
-  p.questions.push(null);
-  buildBombAdm();
+function addBombQ(pid){const p=G.players.find(p=>p.id===pid);if(p){p.qs.push(null);buildBombGrid();}}
+function applyBombQ(pid,qi,type){
+  const p=G.players.find(p=>p.id===pid); if(!p)return;
+  while(p.qs.length<=qi)p.qs.push(null);
+  const map={ok:G.p.c,bad:G.p.w,try:G.p.t,mis:G.p.m};
+  p.qs[qi]=map[type];
+  p.sc=p.qs.filter(q=>q!==null).reduce((a,b)=>a+b,0);
+  buildBombGrid(); renderPlayers();
+  const lbl={ok:'✅',bad:'❌',try:'🔄',mis:'💨'};
+  alog(`Bomb Q${qi+1} ${p.nm} → ${lbl[type]} (${map[type]>=0?'+':''}${map[type]})`, map[type]>0?'var(--green)':map[type]<0?'var(--red)':'var(--orange)');
 }
-function applyBombQ(playerId, qIdx, type) {
-  const p=G.players.find(p=>p.id===playerId);
-  if(!p)return;
-  while(p.questions.length<=qIdx)p.questions.push(null);
-  const map={correct:G.pts.correct,wrong:G.pts.wrong,try:G.pts.try,miss:G.pts.miss};
-  p.questions[qIdx]=map[type];
-  p.indivScore=p.questions.filter(q=>q!==null).reduce((a,b)=>a+b,0);
-  buildBombAdm(); renderPlayerList();
-  const lbl={correct:'✅',wrong:'❌',try:'🔄',miss:'💨'};
-  alog(`Bomb Q${qIdx+1} ${p.name} → ${lbl[type]} (${map[type]>=0?'+':''}${map[type]})`, map[type]>0?'var(--green)':map[type]<0?'var(--red)':'var(--orange)');
-}
-function buildBombAdm() {
-  const c=document.getElementById('bomb-adm-grid');
-  if(!c)return;
-  const curr=G.queue[G.currIdx];
-  const sorted=[...G.players].sort((a,b)=>a.order-b.order);
-  c.innerHTML=sorted.map(p=>{
+function buildBombGrid(){
+  const c=document.getElementById('bomb-grid'); if(!c)return;
+  const curr=G.queue[G.ci];
+  const s=[...G.players].sort((a,b)=>a.ord-b.ord);
+  c.innerHTML=s.map(p=>{
     const isCurr=curr&&curr.id===p.id;
-    const tot=p.questions.filter(q=>q!==null).reduce((a,b)=>a+b,0);
-    const qRows=p.questions.map((v,i)=>`
-      <div class="baq-row">
-        <div class="baq-n">Q${i+1}</div>
-        <div class="baq-res ${v!==null?'set':''}">${v!==null?(v>=0?'+'+v:v)+' pts':'—'}</div>
-        <div class="baq-btns">
-          <button class="baqb baqb-ok"  onclick="applyBombQ(${p.id},${i},'correct')">✅</button>
-          <button class="baqb baqb-bad" onclick="applyBombQ(${p.id},${i},'wrong')">❌</button>
-          <button class="baqb baqb-try" onclick="applyBombQ(${p.id},${i},'try')">🔄</button>
-          <button class="baqb baqb-mis" onclick="applyBombQ(${p.id},${i},'miss')">💨</button>
-        </div>
-      </div>`).join('');
-    return `<div class="bac ${isCurr?'curr':''}">
-      <div class="bac-hd ${isCurr?'gold':''}">
-        <div class="bac-nm ${isCurr?'dk':''}">${p.name} <span style="font-family:var(--ff-m);font-size:9px;opacity:.6">Éq.${p.team.toUpperCase()}</span></div>
-        <div class="bac-tot ${isCurr?'dk':''}">${tot>=0?'+':''}${tot}pts</div>
+    const tot=p.qs.filter(q=>q!==null).reduce((a,b)=>a+b,0);
+    return `<div class="bc ${isCurr?'curr':''}">
+      <div class="bc-hd ${isCurr?'gold':'navy'}">
+        <div class="bc-nm ${isCurr?'dk':'wh'}">${p.nm} <span style="font-size:9px;opacity:.6">Éq.${p.tm.toUpperCase()}</span></div>
+        <div class="bc-pts ${isCurr?'dk':'gold'}">${tot>=0?'+':''}${tot}pts</div>
       </div>
-      <div class="bac-body">
-        ${qRows}
-        <button class="baqb baqb-add" style="margin-top:5px;width:100%" onclick="addBombQ(${p.id})">+ Ajouter question</button>
+      <div class="bc-body">
+        ${p.qs.map((v,i)=>`
+          <div class="bq-row">
+            <div class="bq-n">Q${i+1}</div>
+            <div class="bq-v ${v!==null?'set':''}">${v!==null?(v>=0?'+':'')+v+' pts':'—'}</div>
+            <div class="bq-acts">
+              <button class="bqb bqb-ok" onclick="applyBombQ(${p.id},${i},'ok')">✅</button>
+              <button class="bqb bqb-bad" onclick="applyBombQ(${p.id},${i},'bad')">❌</button>
+              <button class="bqb bqb-try" onclick="applyBombQ(${p.id},${i},'try')">🔄</button>
+              <button class="bqb bqb-mis" onclick="applyBombQ(${p.id},${i},'mis')">💨</button>
+            </div>
+          </div>`).join('')}
+        <button class="bqb bqb-add" style="width:100%;padding:4px;margin-top:4px" onclick="addBombQ(${p.id})">+ Question</button>
       </div>
     </div>`;
   }).join('');
 }
-function buildQueuePreview() {
-  const c=document.getElementById('bomb-queue-preview');
-  if(!c)return;
-  const sorted=[...G.players].sort((a,b)=>a.order-b.order);
-  c.innerHTML=sorted.map((p,i)=>{
-    const isCurr=i===G.currIdx;
-    const isDone=p.done;
-    return `<span style="padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700;font-family:var(--ff-m);
-      background:${isDone?'rgba(0,184,148,.12)':isCurr?'rgba(232,168,0,.15)':'rgba(255,255,255,.05)'};
-      color:${isDone?'var(--green)':isCurr?'var(--gold)':'rgba(255,255,255,.35)'};
-      border:1px solid ${isDone?'rgba(0,184,148,.25)':isCurr?'rgba(232,168,0,.3)':'rgba(255,255,255,.07)'}">
-      ${isDone?'✓':isCurr?'▶':`${i+1}.`} ${p.name}
-    </span>`;
-  }).join('');
+function buildQueue(){
+  const c=document.getElementById('bomb-queue'); if(!c)return;
+  const s=[...G.players].sort((a,b)=>a.ord-b.ord);
+  c.innerHTML=s.map((p,i)=>`
+    <span style="padding:4px 12px;border-radius:12px;font-size:10px;font-weight:700;font-family:var(--ff-m);
+      background:${p.done?'rgba(0,184,148,.1)':i===G.ci?'rgba(232,168,0,.12)':'var(--off)'};
+      color:${p.done?'var(--green)':i===G.ci?'var(--navy)':'var(--muted)'};
+      border:1.5px solid ${p.done?'rgba(0,184,148,.25)':i===G.ci?'rgba(232,168,0,.3)':'var(--line)'}">
+      ${p.done?'✓':i===G.ci?'▶':`${i+1}.`} ${p.nm}
+    </span>`).join('');
 }
 
-/* ══════════════════════════════════════════════
-   TIMER
-══════════════════════════════════════════════ */
-function startTimer() {
-  if(G.bomb.running)return;
-  G.bomb.running=true;
-  G.bomb.interval=setInterval(()=>{
-    G.bomb.timeLeft=Math.max(0,G.bomb.timeLeft-1);
-    updateClock();
-    if(G.bomb.timeLeft<=0){stopTimer();toast('⏱ Temps écoulé !','w');alog('Bombardement — temps écoulé','var(--orange)');}
-  },1000);
-}
-function stopTimer(){G.bomb.running=false;clearInterval(G.bomb.interval);}
-function resetTimer(){stopTimer();G.bomb.duration=+(document.getElementById('bomb-dur-in')?.value||60);G.bomb.timeLeft=G.bomb.duration;updateClock();}
-function updateClock(){
-  const s=G.bomb.timeLeft;
-  const txt=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
-  const ac=document.getElementById('bomb-adm-clk');
-  if(ac){ac.textContent=txt;ac.className=`timer-big${s<=10?' warn':''}`;}
-}
+/* ── TIMER ── */
+function startTimer(){if(G.brun)return;G.brun=true;G.bint=setInterval(()=>{G.bt=Math.max(0,G.bt-1);updateTimerDisplay();if(G.bt<=0){stopTimer();toast('⏱ Temps écoulé !','w');}},1000);}
+function stopTimer(){G.brun=false;clearInterval(G.bint);}
+function resetTimer(){stopTimer();G.bd=+(document.getElementById('bomb-dur')?.value||60);G.bt=G.bd;updateTimerDisplay();}
+function updateTimerDisplay(){const e=document.getElementById('bomb-timer');if(e){e.textContent=`${Math.floor(G.bt/60)}:${String(G.bt%60).padStart(2,'0')}`;e.className='timer-dsp'+(G.bt<=10?' warn':'');}}
 
-/* ══════════════════════════════════════════════
-   RESULTS
-══════════════════════════════════════════════ */
-function buildResults() {
-  const indivA=G.players.filter(p=>p.team==='a').reduce((s,p)=>s+p.indivScore,0);
-  const indivB=G.players.filter(p=>p.team==='b').reduce((s,p)=>s+p.indivScore,0);
-  document.getElementById('res-na').textContent=G.schoolA.split(' ')[0];
-  document.getElementById('res-nb').textContent=G.schoolB.split(' ')[0];
-  document.getElementById('res-ta').textContent=G.sa+indivA;
-  document.getElementById('res-tb').textContent=G.sb+indivB;
-  const tbody=document.getElementById('res-tbody');
-  let rows=`<tr><td class="td-nm">Collectif</td><td>A:${G.sa} / B:${G.sb}</td><td>—</td><td>—</td><td class="td-tot">A:${G.sa} B:${G.sb}</td></tr>`;
+/* ── RESULTS ── */
+function buildResults(){
+  const ia=G.players.filter(p=>p.tm==='a').reduce((s,p)=>s+p.sc,0);
+  const ib=G.players.filter(p=>p.tm==='b').reduce((s,p)=>s+p.sc,0);
+  document.getElementById('res-na').textContent=G.nameA;
+  document.getElementById('res-nb').textContent=G.nameB;
+  document.getElementById('res-ta').textContent=G.sa+ia;
+  document.getElementById('res-tb').textContent=G.sb+ib;
+  let rows=`<tr><td class="td-nm">Collectif</td><td>—</td><td>—</td><td>A:${G.sa} B:${G.sb}</td><td>—</td></tr>`;
   G.players.forEach(p=>{
-    const coll=p.team==='a'?G.sa:G.sb;
-    rows+=`<tr><td class="td-nm">${p.name}</td><td><span class="ptag ${p.team==='a'?'ptag-a':'ptag-b'}">Éq.${p.team.toUpperCase()}</span></td><td class="td-pt">${p.indivScore>=0?'+':''}${p.indivScore}</td><td class="td-pt">${coll}</td><td class="td-tot">${p.indivScore+coll}</td></tr>`;
+    const c=p.tm==='a'?G.sa:G.sb;
+    rows+=`<tr><td class="td-nm">${p.nm}</td><td><span class="pl-tg ${p.tm}" style="display:inline-block">${p.tm.toUpperCase()}</span></td><td class="td-pts">${p.sc>=0?'+':''}${p.sc}</td><td class="td-pts">${c}</td><td style="font-weight:700;color:var(--navy)">${p.sc+c}</td></tr>`;
   });
-  tbody.innerHTML=rows;
+  document.getElementById('res-body').innerHTML=rows;
 }
 
-/* ══════════════════════════════════════════════
-   JURY
-══════════════════════════════════════════════ */
-function openJury() {
-  buildJury();
-  document.getElementById('jury-screen').classList.add('active');
-}
-function closeJury() {
-  document.getElementById('jury-screen').classList.remove('active');
-}
-function buildJury() {
-  const indivA=G.players.filter(p=>p.team==='a').reduce((s,p)=>s+p.indivScore,0);
-  const indivB=G.players.filter(p=>p.team==='b').reduce((s,p)=>s+p.indivScore,0);
-  document.getElementById('jury-th-a').innerHTML=`🔵 ${G.schoolA.split(' ')[0]}`;
-  document.getElementById('jury-th-b').innerHTML=`🟡 ${G.schoolB.split(' ')[0]}`;
-  document.getElementById('jury-coll-a').textContent=G.sa;
-  document.getElementById('jury-coll-b').textContent=G.sb;
-  document.getElementById('jury-tot-la').textContent=`TOTAL ${G.schoolA.split(' ')[0]}`;
-  document.getElementById('jury-tot-lb').textContent=`TOTAL ${G.schoolB.split(' ')[0]}`;
-  document.getElementById('jury-tot-a').textContent=G.sa+indivA;
-  document.getElementById('jury-tot-b').textContent=G.sb+indivB;
-  const pA=G.players.filter(p=>p.team==='a');
-  const pB=G.players.filter(p=>p.team==='b');
-  let rows='';
-  for(let i=0;i<Math.max(pA.length,pB.length);i++){
-    const a=pA[i],b=pB[i];
-    rows+=`<div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,.06)">
-      <div style="padding:8px 18px;display:flex;align-items:center;justify-content:space-between">${a?`<span style="color:rgba(255,255,255,.75);font-size:13px">${a.name}</span><span style="font-family:var(--ff-m);font-weight:700;color:var(--gold)">${a.indivScore>=0?'+':''}${a.indivScore}</span>`:'<span style="color:rgba(255,255,255,.2)">—</span>'}</div>
-      <div style="padding:8px 18px;display:flex;align-items:center;justify-content:space-between;border-left:1px solid rgba(255,255,255,.05)">${b?`<span style="color:rgba(255,255,255,.75);font-size:13px">${b.name}</span><span style="font-family:var(--ff-m);font-weight:700;color:var(--gold)">${b.indivScore>=0?'+':''}${b.indivScore}</span>`:'<span style="color:rgba(255,255,255,.2)">—</span>'}</div>
-    </div>`;
-  }
-  document.getElementById('jury-indiv-rows').innerHTML=rows;
+/* ── RESET ── */
+function resetAll(){G.sa=0;G.sb=0;G.players.forEach(p=>{p.sc=0;p.qs=[];p.done=false;});G.ci=-1;G.queue=[];renderScores();alog('Réinitialisation complète','var(--orange)');toast('Réinitialisé','w');}
+
+/* ── AUDIT LOG ── */
+function alog(txt,c='var(--muted)'){
+  const t=new Date().toLocaleTimeString('fr');
+  G.logs.unshift({txt,c,t});
+  const html=G.logs.map(e=>`<div class="audit-row"><div class="adot" style="background:${e.c}"></div><div class="atxt">${e.txt}</div><div class="atime">${e.t}</div></div>`).join('');
+  const sl=document.getElementById('short-log'),fl=document.getElementById('full-log');
+  if(sl)sl.innerHTML=html;
+  if(fl)fl.innerHTML=html;
+  const ct=G.logs.length+' actions';
+  const s=document.getElementById('short-log-ct'),f=document.getElementById('full-log-ct');
+  if(s)s.textContent=ct; if(f)f.textContent=ct;
 }
 
-/* ══════════════════════════════════════════════
-   RESET
-══════════════════════════════════════════════ */
-function resetAll() {
-  G.sa=0;G.sb=0;
-  G.players.forEach(p=>{p.indivScore=0;p.questions=[];p.done=false;});
-  G.currIdx=-1;G.queue=[];
-  updateAdmScores();syncFullscreen();
-  alog('Réinitialisation complète','var(--orange)');
-  toast('Scores remis à zéro','w');
+/* ── TOAST ── */
+function toast(msg,type='ok'){
+  const d=document.createElement('div');
+  d.className=`toast${type==='w'?' w':type==='e'?' e':''}`;
+  d.innerHTML=`<span style="font-size:14px">${type==='ok'?'✓':type==='w'?'⚠':'✕'}</span> ${msg}`;
+  document.getElementById('toasts').appendChild(d);
+  setTimeout(()=>{d.style.opacity='0';d.style.transform='translateX(18px)';d.style.transition='all .3s';setTimeout(()=>d.remove(),300);},2800);
 }
 
-/* ══════════════════════════════════════════════
-   AUDIT LOG
-══════════════════════════════════════════════ */
-function alog(text, color='rgba(255,255,255,.4)') {
-  const now=new Date().toLocaleTimeString('fr');
-  G.auditLog.unshift({text,color,time:now});
-  const html=G.auditLog.map(e=>`<div class="audit-row"><div class="audit-dot" style="background:${e.color}"></div><div class="audit-txt">${e.text}</div><div class="audit-time">${e.time}</div></div>`).join('');
-  const a1=document.getElementById('audit-short');
-  const a2=document.getElementById('audit-full');
-  if(a1)a1.innerHTML=html;
-  if(a2)a2.innerHTML=html;
-}
+/* ── MODAL ── */
+let _cb=null;
+function confirm_(title,body,cb){document.getElementById('m-title').textContent=title;document.getElementById('m-body').textContent=body;_cb=cb;document.getElementById('modal-bg').classList.add('open');document.getElementById('m-ok').onclick=()=>{closeModal();_cb&&_cb()};}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
 
-/* ══════════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════════ */
-function toast(msg, type='ok') {
-  const t=document.createElement('div');
-  t.className=`toast${type==='w'?' w':type==='e'?' e':''}`;
-  t.innerHTML=`<span>${type==='ok'?'✓':type==='w'?'⚠':'✕'}</span> ${msg}`;
-  document.getElementById('toasts').appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(28px)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300);},2500);
-}
-
-/* ══════════════════════════════════════════════
-   MODAL
-══════════════════════════════════════════════ */
-let _mcb=null;
-function confirmAdm(title,body,cb){
-  document.getElementById('m-t').textContent=title;
-  document.getElementById('m-b').textContent=body;
-  _mcb=cb;
-  document.getElementById('modal').classList.add('open');
-  document.getElementById('m-ok').onclick=()=>{closeModal();_mcb&&_mcb();};
-}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-
-/* ══════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════ */
-updateClock();
-syncCfg();
+/* ── INIT ── */
+syncConfig(); updateTimerDisplay();
 </script>
 </body>
 </html>
